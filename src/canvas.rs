@@ -72,6 +72,8 @@ impl Canvas {
         Some(())
     }
 
+    /// Gets an individual pixel fromt the canvas
+    /// Color format: `0xAARRGGBB`
     pub fn get_pixel(&self, x: usize, y: usize) -> Option<u32> {
         if x >= self.width || y >= self.height {
             return None;
@@ -79,11 +81,26 @@ impl Canvas {
 
         let position = self.pixel_position(x, y);
 
-        let color = (self.framebuffer[position] as u32)
+        let color = ((self.framebuffer[position] as u32) << 16)
             | ((self.framebuffer[position + 1] as u32) << 8)
-            | ((self.framebuffer[position + 2] as u32) << 16)
+            | ((self.framebuffer[position + 2] as u32) << 0)
             | ((self.framebuffer[position + 3] as u32) << 24);
 
         Some(color)
+    }
+
+    pub fn resize(&mut self, width: usize, height: usize)  {
+        let mut canvas = Canvas::new(width, height);
+
+        for y in 0..height {
+            for x in 0..width {
+                canvas.set_pixel(
+                    x, y,
+                    self.get_pixel(x, y).unwrap_or(0)
+                );
+            }
+        }
+
+        *self = canvas;
     }
 }

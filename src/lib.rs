@@ -5,5 +5,10 @@ pub mod draw;
 #[macro_use]
 pub mod position;
 
+#[macro_use]
+pub mod size;
+
 #[cfg(test)]
 pub mod tests;
+
+pub trait Drawable: draw::Draw + size::Size {}

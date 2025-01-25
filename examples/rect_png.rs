@@ -2,7 +2,6 @@ use std::fs::File;
 use zeraus::canvas::Canvas;
 use zeraus::components::rectangle::Rectangle;
 use zeraus::draw::Draw;
-use zeraus::position::Position;
 
 const WIDTH: usize = 10;
 const HEIGHT: usize = 10;
@@ -10,13 +9,12 @@ const HEIGHT: usize = 10;
 fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
 
-    let mut rect = Rectangle::new()
+    let rect = Rectangle::new()
         .with_size(WIDTH, HEIGHT)
         .borders(0xff_ff0000, 2)
         .foreground_color(0xff_ff00ff);
 
-    rect.set_position(0, 0);
-    rect.draw(&mut canvas);
+    rect.draw(&mut canvas, 0, 0);
 
     let buffer = canvas.buffer();
 

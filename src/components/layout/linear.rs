@@ -1,7 +1,7 @@
 use std::cmp::max;
 
 use crate::canvas::Canvas;
-use crate::components::widget::Widget;
+// use crate::components::widget::Widget;
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
@@ -14,7 +14,7 @@ type Drawables = Vec<Box<dyn Drawable>>;
 
 #[derive(Default)]
 pub struct LinearLayout {
-    pub(crate) widget: Widget,
+    //pub(crate) widget: Widget,
     pub(crate) contained_widgets: Drawables,
     pub(crate) direction: Direction,
 }

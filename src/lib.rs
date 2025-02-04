@@ -8,6 +8,8 @@ pub mod position;
 #[macro_use]
 pub mod size;
 
+pub mod alignment;
+
 #[cfg(test)]
 pub mod tests;
 

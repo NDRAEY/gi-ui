@@ -12,6 +12,7 @@ use super::Direction;
 
 type Drawables = Vec<Box<dyn Drawable>>;
 
+// TODO: Add alignment
 #[derive(Default)]
 pub struct LinearLayout {
     //pub(crate) widget: Widget,

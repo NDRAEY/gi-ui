@@ -10,6 +10,3 @@ pub enum HorizontalAlignment {
 	RIGHT
 }
 
-pub trait VAlignment {
-	fn set_vertical_alignment(&mut self, align: VerticalAlignment);
-}

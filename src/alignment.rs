@@ -1,12 +1,15 @@
+#[derive(Default)]
 pub enum VerticalAlignment {
-	TOP,
-	CENTER,
-	BOTTOM
+    #[default]
+    TOP,
+    CENTER,
+    BOTTOM,
 }
 
+#[derive(Default)]
 pub enum HorizontalAlignment {
-	LEFT,
-	CENTER,
-	RIGHT
+    #[default]
+    LEFT,
+    CENTER,
+    RIGHT,
 }
-

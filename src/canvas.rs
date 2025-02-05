@@ -89,15 +89,12 @@ impl Canvas {
         Some(color)
     }
 
-    pub fn resize(&mut self, width: usize, height: usize)  {
+    pub fn resize(&mut self, width: usize, height: usize) {
         let mut canvas = Canvas::new(width, height);
 
         for y in 0..height {
             for x in 0..width {
-                canvas.set_pixel(
-                    x, y,
-                    self.get_pixel(x, y).unwrap_or(0)
-                );
+                canvas.set_pixel(x, y, self.get_pixel(x, y).unwrap_or(0));
             }
         }
 

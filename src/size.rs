@@ -3,6 +3,10 @@ pub trait Size {
     fn size(&self) -> (usize, usize);
 }
 
+// pub trait FullSize {
+//     fn full_size(&self) -> (usize, usize);
+// }
+
 #[macro_export]
 macro_rules! impl_size {
     ($type:ty) => {

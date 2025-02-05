@@ -1,10 +1,6 @@
 use std::fs::File;
-use zeraus::canvas::Canvas;
-use zeraus::components::layout::linear::LinearLayout;
-use zeraus::components::layout::Direction;
-use zeraus::components::rectangle::Rectangle;
-use zeraus::draw::Draw;
-use zeraus::size::Size;
+
+use zeraus::{canvas::Canvas, components::{layout::{linear::LinearLayout, overlay::OverlayLayout, Direction}, rectangle::Rectangle}, draw::Draw, size::Size};
 
 const WIDTH: usize = 200;
 const HEIGHT: usize = 200;
@@ -20,32 +16,22 @@ fn main() {
         .with_size(20, 20)
         .foreground_color(0xff_00ff00);
 
-    let rect3 = Rectangle::new()
-        .with_size(20, 20)
-        .foreground_color(0xff_0000ff);
-
-    let rect4 = Rectangle::new()
-        .with_size(20, 20)
-        .foreground_color(0xff_ffffff);
-
     let mut layout = LinearLayout::new();
-
     layout.set_direction(Direction::HORIZONTAL);
     layout.push(rect1);
-    layout.push(rect2);
 
     let mut layout2 = LinearLayout::new();
     layout2.set_direction(Direction::HORIZONTAL);
-    layout2.push(rect3);
-    layout2.push(rect4);
+    layout2.set_margin(5, 5, 0, 0);
+    layout2.push(rect2);
 
-    let mut layout_common = LinearLayout::new();
-    layout_common.push(layout);
-    layout_common.push(layout2);
+    let mut lay = OverlayLayout::new();
+    lay.push(layout);
+    lay.push(layout2);
 
-    let (total_width, total_height) = layout_common.size();
+    let (total_width, total_height) = lay.size();
 
-    layout_common.draw(&mut canvas, 0, 0);
+    lay.draw(&mut canvas, 0, 0);
 
     canvas.resize(total_width, total_height);
 

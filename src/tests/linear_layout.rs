@@ -1,18 +1,20 @@
-use crate::{components::{layout::{linear::LinearLayout, Direction}, rectangle::Rectangle}, size::Size};
+use crate::{
+    components::{
+        layout::{linear::LinearLayout, Direction},
+        rectangle::Rectangle,
+    },
+    size::Size,
+};
 
 #[test]
 fn four_rectangles_vh() {
-    let rect1 = Rectangle::new()
-        .with_size(20, 20);
+    let rect1 = Rectangle::new().with_size(20, 20);
 
-    let rect2 = Rectangle::new()
-        .with_size(20, 20);
+    let rect2 = Rectangle::new().with_size(20, 20);
 
-    let rect3 = Rectangle::new()
-        .with_size(20, 20);
+    let rect3 = Rectangle::new().with_size(20, 20);
 
-    let rect4 = Rectangle::new()
-        .with_size(20, 20);
+    let rect4 = Rectangle::new().with_size(20, 20);
 
     let mut layout = LinearLayout::new();
 
@@ -31,6 +33,6 @@ fn four_rectangles_vh() {
     let mut layout_common = LinearLayout::new();
     layout_common.push(layout);
     layout_common.push(layout2);
-    
+
     assert_eq!(layout_common.size(), (40, 40));
 }

@@ -20,8 +20,8 @@ impl Draw for Text {
         for i in self.text.chars() {
             let (metrics, character) = self.font.as_ref().unwrap().rasterize(i, self.size as f32);
 
-            for y in (0..metrics.height) {
-                for x in (0..metrics.width) {
+            for y in 0..metrics.height {
+                for x in 0..metrics.width {
                     canvas.set_pixel(x, y, self.color * (character[y * metrics.width + x] as u32));
                 }
             }

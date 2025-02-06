@@ -4,6 +4,7 @@ use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
 type Drawables = Vec<Box<dyn Drawable>>;
 
+#[derive(Default)]
 pub struct OverlayLayout {
     //pub(crate) widget: Widget,
     pub(crate) contained_widgets: Drawables,

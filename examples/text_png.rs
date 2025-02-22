@@ -11,24 +11,29 @@ use zeraus::{
     size::Size,
 };
 
-const WIDTH: usize = 500;
+const WIDTH: usize = 4000;
 const HEIGHT: usize = 200;
 
 fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
 
     let text = Text::new()
-        .with_size(24)
+        .with_size(64)
         .with_font_file("./examples/Ubuntu-Regular.ttf")
         .unwrap()
-        .with_text("Alright!");
+        // .with_text("Aa");
+    .with_text("Perkele vitun saatana jumalauta");
 
     let tsize = text.size();
 
+    let rect = Rectangle::new()
+        .with_size(tsize.0, tsize.1)
+        .foreground_color(0xff_ffffff);
+
     println!("{:?}", tsize);
 
-    let mut layout = LinearLayout::new();
-    layout.set_direction(Direction::HORIZONTAL);
+    let mut layout = OverlayLayout::new();
+    layout.push(rect);
     layout.push(text);
 
     let (total_width, total_height) = layout.size();

@@ -1,4 +1,7 @@
-use std::cmp::max;
+use core::cmp::max;
+
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 
 use crate::canvas::Canvas;
 use crate::draw::Draw;

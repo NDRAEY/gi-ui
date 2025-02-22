@@ -1,6 +1,12 @@
-use std::{cmp::max, io::Read};
+use core::cmp::max;
+use std::{cell::{RefCell, RefMut}, io::Read, rc::Rc};
 
-use fontdue::{self, FontSettings};
+use alloc::string::ToString;
+use fontdue::{
+    self,
+    layout::{CoordinateSystem, Layout, LayoutSettings, TextStyle},
+    FontSettings,
+};
 
 use crate::{draw::Draw, size::Size, Drawable};
 
@@ -11,22 +17,43 @@ pub struct Text {
     pub(crate) text: String,
     pub(crate) size: usize,
     pub(crate) font: Option<fontdue::Font>,
+    // I would like to add `layout: Option<fontdue::layout::Layout>`, but it's not cloneable,
+    // So I use Rc to make it shared.
+    layout: Rc<RefCell<Option<fontdue::layout::Layout>>>
 }
 
 impl Draw for Text {
     fn draw(&self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
-        let (mut sx, mut sy) = (0usize, 0usize);
+        let mut layout_ref = self.prepare_layout();
+        let layout = layout_ref.as_mut().unwrap();
 
-        for i in self.text.chars() {
-            let (metrics, character) = self.font.as_ref().unwrap().rasterize(i, self.size as f32);
+        let positions = layout.glyphs();
 
-            for y in 0..metrics.height {
-                for x in 0..metrics.width {
-                    canvas.set_pixel(x, y, self.color * (character[y * metrics.width + x] as u32));
+        // We iterate over characters.
+        for (nr, i) in self.text.chars().enumerate() {
+            // And rasterize each character.
+            let (_, character) = self.font.as_ref().unwrap().rasterize(i, self.size as f32);
+
+            let position = positions[nr];
+
+            println!("`{}` => {:#?}", &i, &position);
+
+            // Then it's an usual loop to draw a chacter on a `canvas`.
+            for py in 0..position.height {
+                for px in 0..position.width {
+                    // Get an intensity from bitmap
+                    let intensity = character[py * position.width + px] as f32 / 255.0;
+                    // Separate color from it
+                    let color = self.color & 0xff_ff_ff;
+                    // And alpha channel (0..=255), then we multiply with alpha (0.00..=1.00).
+                    let alpha = ((self.color >> 24) & 0xff) as f32 * intensity;
+                    // Then we glue it back.
+                    let result = ((alpha as u32) << 24) | color;
+
+                    // And paint that pixel to canvas.
+                    canvas.blit(px + position.x.round() as usize, py + position.y.round() as usize, result);
                 }
             }
-
-            sx += metrics.width;
         }
     }
 }
@@ -37,17 +64,13 @@ impl Size for Text {
     }
 
     fn size(&self) -> (usize, usize) {
-        let (mut width, mut height) = (0usize, 0usize);
+        let mut layout_ref = self.prepare_layout();
+        let layout = layout_ref.as_mut().unwrap();
 
-        for i in self.text.chars() {
-            let metrics = self.font.as_ref().unwrap().metrics(i, self.size as f32);
+        let last_character = layout.glyphs().iter().last().unwrap();
+        let width = last_character.x.round() as usize + last_character.width;
 
-            // TODO: Advanced size calculation
-            width += metrics.width;
-            height = max(height, metrics.height);
-        }
-
-        (width, height)
+        (width, layout.height().round() as usize)
     }
 }
 
@@ -55,11 +78,18 @@ impl Drawable for Text {}
 
 impl Text {
     pub fn new() -> Self {
+        let mut layout = Layout::new(CoordinateSystem::PositiveYDown);
+        layout.reset(&LayoutSettings {
+            ..Default::default()
+        });
+
         Self {
-            color: 0,
+            // color: 0xff_000000,
+            color: 0xff_0000ff,
             text: "".to_string(),
             size: 18,
             font: None,
+            layout: Rc::new(RefCell::new(Some(layout)))
         }
     }
 
@@ -75,23 +105,39 @@ impl Text {
         text_obj
     }
 
-    pub fn with_font_file(self, font_path: &str) -> Option<Self> {
+    pub fn with_font_data(self, font_data: &[u8]) -> Option<Self> {
         let mut text_obj = self;
 
-        let mut file = std::fs::File::open(font_path).unwrap();
-        let length = file.metadata().unwrap().len();
-        let mut data = vec![0; length as usize];
+        let font = fontdue::Font::from_bytes(font_data, FontSettings::default());
 
-        file.read(data.as_mut_slice()).unwrap();
-
-        let font = fontdue::Font::from_bytes(data.as_slice(), FontSettings::default());
-
-        if let Err(e) = font {
+        if let Err(_) = font {
             return None;
         }
 
         text_obj.font = Some(font.unwrap());
 
         Some(text_obj)
+    }
+
+    pub fn with_font_file(self, font_path: &str) -> Option<Self> {
+        let mut file = std::fs::File::open(font_path).unwrap();
+        let length = file.metadata().unwrap().len();
+        let mut data = vec![0; length as usize];
+
+        file.read(data.as_mut_slice()).unwrap();
+
+        self.with_font_data(data.as_slice())
+    }
+
+    fn prepare_layout(&self) -> RefMut<Option<Layout>> {
+        let fonts = &[self.font.as_ref().unwrap()];
+
+        let mut almost_layout = self.layout.borrow_mut();
+        let layout = almost_layout.as_mut().unwrap();
+
+        layout.clear();
+        layout.append(fonts, &TextStyle::new(&self.text, self.size as f32, 0));
+
+        almost_layout
     }
 }

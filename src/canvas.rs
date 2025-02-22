@@ -72,6 +72,35 @@ impl Canvas {
         Some(())
     }
 
+    pub fn blit(&mut self, x: usize, y: usize, color: u32) -> Option<()> {
+        if x >= self.width || y >= self.height {
+            return None;
+        }
+
+        let position = self.pixel_position(x, y);
+        let (r, g, b, a) = Self::into_rgba(color);
+
+        let r: u32 = r as u32;
+        let g: u32 = g as u32;
+        let b: u32 = b as u32;
+        let a: u32 = a as u32;
+
+        let background = self.get_pixel(x, y).unwrap_or(0);
+        let (br, bg, bb, _) = Self::into_rgba(background);
+
+        let br: u32 = br as u32;
+        let bg: u32 = bg as u32;
+        let bb: u32 = bb as u32;
+
+        let inv_alpha = 255 - a as u32;
+
+        self.framebuffer[position + 0] = ((a * b + inv_alpha * br) >> 8) as u8;
+        self.framebuffer[position + 1] = ((a * g + inv_alpha * bg) >> 8) as u8;
+        self.framebuffer[position + 2] = ((a * r + inv_alpha * bb) >> 8) as u8;
+
+        Some(())
+    }
+
     /// Gets an individual pixel fromt the canvas
     /// Color format: `0xAARRGGBB`
     pub fn get_pixel(&self, x: usize, y: usize) -> Option<u32> {

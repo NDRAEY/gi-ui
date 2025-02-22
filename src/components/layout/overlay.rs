@@ -1,4 +1,9 @@
-use std::cmp::max;
+use core::cmp::max;
+
+use alloc::{
+    boxed::Box,
+    vec::{self, Vec},
+};
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 

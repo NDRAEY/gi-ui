@@ -1,9 +1,8 @@
 use core::cmp::max;
 
-use alloc::{
-    boxed::Box,
-    vec::{self, Vec},
-};
+use alloc::{boxed::Box, vec::Vec};
+
+use alloc::vec;
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 

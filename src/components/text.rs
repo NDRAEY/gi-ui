@@ -1,7 +1,17 @@
-use core::cmp::max;
-use std::{cell::{RefCell, RefMut}, io::Read, rc::Rc};
+use core::cell::{RefCell, RefMut};
 
+#[cfg(feature = "no_std")]
+use nostd::rc::Rc;
+
+#[cfg(not(feature = "no_std"))]
+use std::rc::Rc;
+
+#[cfg(not(feature = "no_std"))]
+use std::io::Read;
+
+use alloc::string::String;
 use alloc::string::ToString;
+
 use fontdue::{
     self,
     layout::{CoordinateSystem, Layout, LayoutSettings, TextStyle},
@@ -19,7 +29,7 @@ pub struct Text {
     pub(crate) font: Option<fontdue::Font>,
     // I would like to add `layout: Option<fontdue::layout::Layout>`, but it's not cloneable,
     // So I use Rc to make it shared.
-    layout: Rc<RefCell<Option<fontdue::layout::Layout>>>
+    layout: Rc<RefCell<Option<fontdue::layout::Layout>>>,
 }
 
 impl Draw for Text {
@@ -36,8 +46,6 @@ impl Draw for Text {
 
             let position = positions[nr];
 
-            println!("`{}` => {:#?}", &i, &position);
-
             // Then it's an usual loop to draw a chacter on a `canvas`.
             for py in 0..position.height {
                 for px in 0..position.width {
@@ -51,7 +59,7 @@ impl Draw for Text {
                     let result = ((alpha as u32) << 24) | color;
 
                     // And paint that pixel to canvas.
-                    canvas.blit(px + position.x.round() as usize, py + position.y.round() as usize, result);
+                    canvas.blit(px + position.x as usize, py + position.y as usize, result);
                 }
             }
         }
@@ -68,9 +76,9 @@ impl Size for Text {
         let layout = layout_ref.as_mut().unwrap();
 
         let last_character = layout.glyphs().iter().last().unwrap();
-        let width = last_character.x.round() as usize + last_character.width;
+        let width = last_character.x as usize + last_character.width;
 
-        (width, layout.height().round() as usize)
+        (width, layout.height() as usize)
     }
 }
 
@@ -89,7 +97,7 @@ impl Text {
             text: "".to_string(),
             size: 18,
             font: None,
-            layout: Rc::new(RefCell::new(Some(layout)))
+            layout: Rc::new(RefCell::new(Some(layout))),
         }
     }
 
@@ -119,6 +127,7 @@ impl Text {
         Some(text_obj)
     }
 
+    #[cfg(not(feature = "no_std"))]
     pub fn with_font_file(self, font_path: &str) -> Option<Self> {
         let mut file = std::fs::File::open(font_path).unwrap();
         let length = file.metadata().unwrap().len();

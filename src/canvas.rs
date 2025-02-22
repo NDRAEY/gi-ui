@@ -2,6 +2,9 @@
 //! Pixel format is RGBA.
 pub const BITS_PER_PIXEL: usize = 32;
 
+use alloc::vec;
+use alloc::vec::Vec;
+
 pub struct Canvas {
     framebuffer: Vec<u8>,
     width: usize,

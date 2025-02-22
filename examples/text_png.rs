@@ -22,7 +22,7 @@ fn main() {
         .with_font_file("./examples/Ubuntu-Regular.ttf")
         .unwrap()
         // .with_text("Aa");
-    .with_text("Perkele vitun saatana jumalauta");
+        .with_text("Zeraus!");
 
     let tsize = text.size();
 

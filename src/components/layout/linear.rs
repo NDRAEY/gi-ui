@@ -1,7 +1,9 @@
+use core::cell::RefCell;
 use core::cmp::max;
 
 use alloc::boxed::Box;
 use alloc::vec::Vec;
+use alloc::rc::Rc;
 
 use crate::canvas::Canvas;
 use crate::draw::Draw;
@@ -11,12 +13,11 @@ use crate::Drawable;
 
 use super::Direction;
 
-type Drawables = Vec<Box<dyn Drawable>>;
+type Drawables = Vec<Rc<RefCell<Box<(dyn Drawable + 'static)>>>>;
 
 // TODO: Add alignment
 #[derive(Default)]
 pub struct LinearLayout {
-    //pub(crate) widget: Widget,
     pub(crate) contained_widgets: Drawables,
     pub direction: Direction,
     pub horizontal_alignment: crate::alignment::HorizontalAlignment,
@@ -35,7 +36,7 @@ impl Size for LinearLayout {
         let mut sy = 0isize;
 
         for element in &self.contained_widgets {
-            let (w, h) = element.size();
+            let (w, h) = element.borrow().size();
 
             match self.direction {
                 Direction::VERTICAL => {
@@ -62,6 +63,7 @@ impl Draw for LinearLayout {
         let mut sy = (y as isize + self.margin.top) as usize;
 
         for element in &self.contained_widgets {
+            let element = element.borrow();
             let (w, h) = element.size();
 
             element.draw(canvas, sx, sy);
@@ -91,8 +93,12 @@ impl LinearLayout {
         self.direction = direction;
     }
 
-    pub fn push(&mut self, element: impl Drawable + 'static) {
-        self.contained_widgets.push(Box::new(element));
+    pub fn push(&mut self, element: (impl Drawable + 'static)) -> Rc<RefCell<Box<dyn Drawable>>> {
+        let el: Rc<RefCell<Box<dyn Drawable>>> = Rc::new(RefCell::new(Box::new(element)));
+
+        self.contained_widgets.push(el.clone());
+
+        el
     }
 
     pub fn set_margin(&mut self, left: isize, top: isize, right: isize, bottom: isize) {

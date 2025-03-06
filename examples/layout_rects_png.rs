@@ -40,8 +40,11 @@ fn main() {
     layout2.push(rect4);
 
     let mut layout_common = LinearLayout::new();
-    layout_common.push(layout);
-    layout_common.push(layout2);
+    let layout = layout_common.push(layout);
+    let layout2 = layout_common.push(layout2);
+
+    println!("{} {}", layout.borrow().size().0, layout.borrow().size().1);
+    println!("{} {}", layout.borrow().size().0, layout.borrow().size().1);
 
     let (total_width, total_height) = layout_common.size();
 

@@ -3,6 +3,8 @@ use tinytga::{ParseError, RawPixel, RawTga};
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 use tinytga::Bpp::Bits24;
 
+use alloc::vec::Vec;
+
 #[derive(Clone)]
 pub struct Image {
     //pub(crate) widget: widget::Widget,

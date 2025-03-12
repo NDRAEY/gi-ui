@@ -81,7 +81,11 @@ impl Draw for LinearLayout {
     }
 }
 
-impl Drawable for LinearLayout {}
+impl Drawable for LinearLayout {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+}
 
 impl LinearLayout {
     pub fn new() -> Self {

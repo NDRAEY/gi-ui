@@ -1,5 +1,7 @@
 #![cfg_attr(all(not(test), feature = "no_std"), no_std)]
 
+use core::any::Any;
+
 extern crate alloc;
 
 pub mod canvas;
@@ -17,6 +19,6 @@ pub mod side;
 #[cfg(test)]
 pub mod tests;
 
-pub mod margin;
-
-pub trait Drawable: draw::Draw + size::Size {}
+pub trait Drawable: draw::Draw + size::Size {
+    fn as_any(&self) -> &dyn Any;
+}

@@ -34,7 +34,11 @@ impl Draw for Image {
     }
 }
 
-impl Drawable for Image {}
+impl Drawable for Image {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+}
 
 impl Image {
     pub fn from_image_data(data: &[u8]) -> Option<Image> {

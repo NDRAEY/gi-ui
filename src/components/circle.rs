@@ -35,13 +35,17 @@ impl Size for Circle {
 
     fn size(&self) -> (usize, usize) {
         (
-            self.radius + self.border_size,
-            self.radius + self.border_size,
+            (self.radius * 2) + self.border_size,
+            (self.radius * 2) + self.border_size,
         )
     }
 }
 
-impl Drawable for Circle {}
+impl Drawable for Circle {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+}
 
 impl Circle {
     pub fn new() -> Self {
@@ -49,7 +53,7 @@ impl Circle {
             radius: 0,
             foreground_color: 0x00_000000,
             border_color: 0x00_000000,
-            border_size: 1,
+            border_size: 0,
         }
     }
 

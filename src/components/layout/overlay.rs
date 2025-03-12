@@ -43,7 +43,11 @@ impl Draw for OverlayLayout {
     }
 }
 
-impl Drawable for OverlayLayout {}
+impl Drawable for OverlayLayout {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+}
 
 impl OverlayLayout {
     pub fn new() -> Self {

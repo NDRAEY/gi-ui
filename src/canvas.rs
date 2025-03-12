@@ -132,4 +132,12 @@ impl Canvas {
 
         *self = canvas;
     }
+    
+    pub fn fill(&mut self, color: u32) {
+        for y in 0..self.height {
+            for x in 0..self.width {
+                self.set_pixel(x, y, color);
+            }
+        }
+    }
 }

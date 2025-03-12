@@ -9,7 +9,7 @@ use crate::canvas::Canvas;
 use crate::draw::Draw;
 use crate::side::Side;
 use crate::size::Size;
-use crate::Drawable;
+use crate::{alignment, Drawable};
 
 use super::Direction;
 
@@ -20,8 +20,8 @@ type Drawables = Vec<Rc<RefCell<Box<(dyn Drawable + 'static)>>>>;
 pub struct LinearLayout {
     pub(crate) contained_widgets: Drawables,
     pub direction: Direction,
-    pub horizontal_alignment: crate::alignment::HorizontalAlignment,
-    pub vertical_alignment: crate::alignment::VerticalAlignment,
+    pub horizontal_alignment: alignment::HorizontalAlignment,
+    pub vertical_alignment: alignment::VerticalAlignment,
     pub margin: crate::side::Side,
 }
 

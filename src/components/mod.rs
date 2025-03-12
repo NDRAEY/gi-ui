@@ -4,3 +4,4 @@ pub mod rectangle;
 pub mod text;
 pub mod widget;
 pub mod image;
+pub mod circle;

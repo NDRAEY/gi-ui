@@ -17,4 +17,6 @@ pub mod side;
 #[cfg(test)]
 pub mod tests;
 
+pub mod margin;
+
 pub trait Drawable: draw::Draw + size::Size {}

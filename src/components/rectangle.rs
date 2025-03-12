@@ -69,14 +69,6 @@ impl Rectangle {
         rect
     }
 
-    // pub fn with_position(self, x: usize, y: usize) -> Self {
-    //     let mut rect = self;
-
-    //     rect.widget.set_position(x, y);
-
-    //     rect
-    // }
-
     pub fn foreground_color(self, color: u32) -> Self {
         let mut rect = self;
 

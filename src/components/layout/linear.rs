@@ -13,7 +13,8 @@ use crate::{alignment, Drawable};
 
 use super::Direction;
 
-type Drawables = Vec<Rc<RefCell<Box<(dyn Drawable + 'static)>>>>;
+type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
+type Drawables = Vec<ContainerDrawable>;
 
 // TODO: Add alignment
 #[derive(Default)]
@@ -108,5 +109,29 @@ impl LinearLayout {
             right,
             bottom,
         };
+    }
+
+    pub fn calculate_element_position(&self, element: &ContainerDrawable) -> Option<(usize, usize)> {
+        let mut sx = (0 as isize + self.margin.left) as usize;
+        let mut sy = (0 as isize + self.margin.top) as usize;
+
+        for i in &self.contained_widgets {    
+            let (w, h) = i.borrow().size();
+
+            if i.as_ptr() == element.as_ptr() {
+                return Some((sx, sy));
+            }
+
+            match self.direction {
+                Direction::VERTICAL => {
+                    sy += h;
+                }
+                Direction::HORIZONTAL => {
+                    sx += w;
+                }
+            }
+        }
+
+        None
     }
 }

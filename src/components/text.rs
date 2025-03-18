@@ -56,7 +56,7 @@ impl Draw for Text {
                     let result = ((alpha as u32) << 24) | color;
 
                     // And paint that pixel to canvas.
-                    canvas.blit(px + position.x as usize, py + position.y as usize, result);
+                    canvas.blit(x + px + position.x as usize, y + py + position.y as usize, result);
                 }
             }
         }
@@ -64,7 +64,7 @@ impl Draw for Text {
 }
 
 impl Size for Text {
-    fn set_size(&mut self, x: usize, y: usize) {
+    fn set_size(&mut self, _: usize, _: usize) {
         unreachable!();
     }
 

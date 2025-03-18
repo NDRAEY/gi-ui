@@ -1,4 +1,4 @@
-use tinytga::{ParseError, RawPixel, RawTga};
+use tinytga::{ParseError, RawTga};
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 use tinytga::Bpp::Bits24;

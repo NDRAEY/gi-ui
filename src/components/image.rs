@@ -56,12 +56,12 @@ impl Image {
                     mod_ | a.color
                 }).collect();
 
-                return Some(Image {
+                Some(Image {
                     image_width: image.size().width as usize,
                     image_height: image.size().height as usize,
                     image_bpp: image.image_data_bpp() as usize,
                     image_data: pxls,
-                });
+                })
             }
             Err(_) => None,
         }

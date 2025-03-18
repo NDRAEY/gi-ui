@@ -4,10 +4,7 @@ use core::cell::{RefCell, RefMut};
 use nostd::rc::Rc;
 
 #[cfg(not(feature = "no_std"))]
-use std::rc::Rc;
-
-#[cfg(not(feature = "no_std"))]
-use std::io::Read;
+use std::{rc::Rc, io::Read};
 
 use alloc::string::String;
 use alloc::string::ToString;
@@ -82,7 +79,15 @@ impl Size for Text {
     }
 }
 
-impl Drawable for Text {}
+impl Drawable for Text {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+        self
+    }
+}
 
 impl Text {
     pub fn new() -> Self {
@@ -118,7 +123,7 @@ impl Text {
 
         let font = fontdue::Font::from_bytes(font_data, FontSettings::default());
 
-        if let Err(_) = font {
+        if font.is_err() {
             return None;
         }
 
@@ -133,7 +138,7 @@ impl Text {
         let length = file.metadata().unwrap().len();
         let mut data = vec![0; length as usize];
 
-        file.read(data.as_mut_slice()).unwrap();
+        file.read_exact(data.as_mut_slice()).unwrap();
 
         self.with_font_data(data.as_slice())
     }

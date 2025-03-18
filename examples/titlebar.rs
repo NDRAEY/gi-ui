@@ -1,14 +1,15 @@
-use std::fs::File;
-use zeraus::alignment::{HorizontalAlignment, VerticalAlignment};
 use zeraus::canvas::Canvas;
 use zeraus::components::circle::Circle;
 use zeraus::components::layout::linear::LinearLayout;
 use zeraus::components::layout::overlay::OverlayLayout;
 use zeraus::components::layout::Direction;
-use zeraus::components::margin::{Margin, MarginValue};
+use zeraus::components::margin::Margin;
 use zeraus::components::rectangle::Rectangle;
+use zeraus::components::touchable::Touchable;
 use zeraus::draw::Draw;
+use zeraus::helpers::i_am_sure_mut;
 use zeraus::size::Size;
+use zeraus::Drawable;
 
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 200;
@@ -22,23 +23,43 @@ fn main() {
         .with_size(800, HEIGHT)
         .foreground_color(0xff_0000ff);
 
-    let close_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(25).foreground_color(0xff_ff0000)),
-        10,
+    let close_button = Touchable::with_listener(Box::new(Margin::like_args(
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_ff0000),
+        ),
+        0,
         0,
         10,
         0,
-    );
+    )), |e, _, _| {
+        println!("Clicked on close");
+
+        let elem: &mut Margin = i_am_sure_mut(e);
+        let elem: &mut Circle = i_am_sure_mut(elem.element_mut().as_mut());
+
+        *elem = elem.set_foreground_color(0xff_ffffff);
+    });
+
     let minimize_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(25).foreground_color(0xff_ffff00)),
-        10,
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_ffff00),
+        ),
+        0,
         0,
         10,
         0,
     );
     let maximize_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(25).foreground_color(0xff_00ff00)),
-        10,
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_00ff00),
+        ),
+        0,
         0,
         10,
         0,
@@ -49,39 +70,35 @@ fn main() {
 
     together.push(close_button);
     together.push(minimize_button);
-    let elp = together.push(maximize_button);
+    together.push(maximize_button);
+
+    let together = Margin::like_args(Box::new(together), 15, 15, 15, 15);
+    let mut together = Touchable::with(Box::new(together));
+
+    together.register_callback(Box::new(Margin::passthrough(
+        |elem: &mut LinearLayout, x, y| {
+            elem.process_touches(x, y);
+        },
+    )));
 
     bar.push(rect);
-    bar.push(together);
+    let clickable_layout = bar.push(together);
 
     let (total_width, total_height) = bar.size();
 
-    let l = elp.borrow();
-    let t = l.as_ref().as_any().downcast_ref::<Margin>();
-    if let Some(x) = t {
-        println!("{:?}", x.element_position());
+    {
+        let mut clickable_layout = clickable_layout.borrow_mut();
+        let clickable_layout: &mut Touchable = clickable_layout
+            .as_any_mut()
+            .downcast_mut::<Touchable>()
+            .unwrap();
+
+        clickable_layout.touch(20, 20);
     }
 
     bar.draw(&mut canvas, 0, 0);
 
     canvas.resize(total_width, total_height);
 
-    let buffer = canvas.buffer();
-
-    {
-        if std::fs::exists("./out.png").unwrap() {
-            std::fs::remove_file("./out.png").unwrap();
-        }
-
-        let file = File::create("./out.png").unwrap();
-        let writer = std::io::BufWriter::new(file);
-
-        let mut encoder = png::Encoder::new(writer, total_width as u32, total_height as u32);
-        encoder.set_color(png::ColorType::Rgba);
-        encoder.set_depth(png::BitDepth::Eight);
-
-        let mut writer = encoder.write_header().unwrap();
-
-        writer.write_image_data(buffer).unwrap();
-    }
+    zeraus::helpers::export_to_png(&canvas);
 }

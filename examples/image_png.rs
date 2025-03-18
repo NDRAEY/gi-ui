@@ -1,4 +1,3 @@
-use std::fs::File;
 use zeraus::canvas::Canvas;
 use zeraus::draw::Draw;
 use zeraus::components::image::Image;
@@ -19,22 +18,5 @@ fn main() {
     println!("{w} {h}");
     canvas.resize(w, h);
 
-    let buffer = canvas.buffer();
-
-    {
-        if std::fs::exists("./out.png").unwrap() {
-            std::fs::remove_file("./out.png").unwrap();
-        }
-
-        let file = File::create("./out.png").unwrap();
-        let writer = std::io::BufWriter::new(file);
-
-        let mut encoder = png::Encoder::new(writer, w as u32, h as u32);
-        encoder.set_color(png::ColorType::Rgba);
-        encoder.set_depth(png::BitDepth::Eight);
-
-        let mut writer = encoder.write_header().unwrap();
-
-        writer.write_image_data(buffer).unwrap();
-    }
+    zeraus::helpers::export_to_png(&canvas);
 }

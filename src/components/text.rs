@@ -4,10 +4,7 @@ use core::cell::{RefCell, RefMut};
 use nostd::rc::Rc;
 
 #[cfg(not(feature = "no_std"))]
-use std::rc::Rc;
-
-#[cfg(not(feature = "no_std"))]
-use std::io::Read;
+use std::{rc::Rc, io::Read};
 
 use alloc::string::String;
 use alloc::string::ToString;
@@ -33,7 +30,7 @@ pub struct Text {
 }
 
 impl Draw for Text {
-    fn draw(&self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
         let mut layout_ref = self.prepare_layout();
         let layout = layout_ref.as_mut().unwrap();
 
@@ -59,7 +56,7 @@ impl Draw for Text {
                     let result = ((alpha as u32) << 24) | color;
 
                     // And paint that pixel to canvas.
-                    canvas.blit(px + position.x as usize, py + position.y as usize, result);
+                    canvas.blit(x + px + position.x as usize, y + py + position.y as usize, result);
                 }
             }
         }
@@ -67,7 +64,7 @@ impl Draw for Text {
 }
 
 impl Size for Text {
-    fn set_size(&mut self, x: usize, y: usize) {
+    fn set_size(&mut self, _: usize, _: usize) {
         unreachable!();
     }
 
@@ -82,7 +79,15 @@ impl Size for Text {
     }
 }
 
-impl Drawable for Text {}
+impl Drawable for Text {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+        self
+    }
+}
 
 impl Text {
     pub fn new() -> Self {
@@ -118,7 +123,7 @@ impl Text {
 
         let font = fontdue::Font::from_bytes(font_data, FontSettings::default());
 
-        if let Err(_) = font {
+        if font.is_err() {
             return None;
         }
 
@@ -133,7 +138,7 @@ impl Text {
         let length = file.metadata().unwrap().len();
         let mut data = vec![0; length as usize];
 
-        file.read(data.as_mut_slice()).unwrap();
+        file.read_exact(data.as_mut_slice()).unwrap();
 
         self.with_font_data(data.as_slice())
     }

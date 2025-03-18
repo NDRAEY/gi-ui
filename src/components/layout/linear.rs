@@ -6,6 +6,7 @@ use alloc::vec::Vec;
 use alloc::rc::Rc;
 
 use crate::canvas::Canvas;
+use crate::components::touchable::Touchable;
 use crate::draw::Draw;
 use crate::side::Side;
 use crate::size::Size;
@@ -59,12 +60,12 @@ impl Size for LinearLayout {
 }
 
 impl Draw for LinearLayout {
-    fn draw(&self, canvas: &mut Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
         let mut sx = (x as isize + self.margin.left) as usize;
         let mut sy = (y as isize + self.margin.top) as usize;
 
-        for element in &self.contained_widgets {
-            let element = element.borrow();
+        for element in &mut self.contained_widgets {
+            let mut element = element.borrow_mut();
             let (w, h) = element.size();
 
             element.draw(canvas, sx, sy);
@@ -83,6 +84,10 @@ impl Draw for LinearLayout {
 
 impl Drawable for LinearLayout {
     fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
         self
     }
 }
@@ -137,5 +142,24 @@ impl LinearLayout {
         }
 
         None
+    }
+
+    pub fn process_touches(&mut self, x: usize, y: usize) {
+        for i in &self.contained_widgets {
+            let position = self.calculate_element_position(&i).unwrap();
+            let size = i.borrow().size();
+
+            if crate::rect::is_point(
+                (x, y),
+                (position.0, position.1, size.0, size.1)
+            ) {
+                let mut elem = i.borrow_mut();
+                let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
+
+                if let Some(elem) = elem {   
+                    elem.touch(x - position.0, y - position.1);
+                }
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ pub struct Rectangle {
 }
 
 impl Draw for Rectangle {
-    fn draw(&self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
         let ax = (x + self.width) - 1;
         let ay = (y + self.height) - 1;
 
@@ -53,6 +53,10 @@ impl Size for Rectangle {
 
 impl Drawable for Rectangle {
     fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+    
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
         self
     }
 }

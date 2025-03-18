@@ -19,6 +19,10 @@ pub mod side;
 #[cfg(test)]
 pub mod tests;
 
+pub mod helpers;
+pub mod rect;
+
 pub trait Drawable: draw::Draw + size::Size {
     fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
 }

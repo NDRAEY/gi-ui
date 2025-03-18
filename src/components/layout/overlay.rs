@@ -36,8 +36,8 @@ impl Size for OverlayLayout {
 }
 
 impl Draw for OverlayLayout {
-    fn draw(&self, canvas: &mut Canvas, x: usize, y: usize) {
-        for element in &self.contained_widgets {
+    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
+        for element in &mut self.contained_widgets {
             element.draw(canvas, x, y);
         }
     }

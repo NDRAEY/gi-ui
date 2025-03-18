@@ -5,6 +5,10 @@ pub const BITS_PER_PIXEL: usize = 32;
 use alloc::vec;
 use alloc::vec::Vec;
 
+use crate::draw::Draw;
+use crate::size::Size;
+use crate::Drawable;
+
 pub struct Canvas {
     framebuffer: Vec<u8>,
     width: usize,
@@ -139,5 +143,35 @@ impl Canvas {
                 self.set_pixel(x, y, color);
             }
         }
+    }
+}
+
+impl Size for Canvas {
+    fn set_size(&mut self, x: usize, y: usize) {
+        self.resize(x, y);
+    }
+
+    fn size(&self) -> (usize, usize) {
+        (self.width(), self.height())
+    }
+}
+
+impl Draw for Canvas {
+    fn draw(&mut self, canvas: &mut Canvas, sx: usize, sy: usize) {
+        for y in 0..canvas.height() {
+            for x in 0..canvas.width() {
+                self.blit(sx + x, sy + y, canvas.get_pixel(x, y).unwrap_or(0));
+            }
+        }
+    }
+}
+
+impl Drawable for Canvas {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+        self
     }
 }

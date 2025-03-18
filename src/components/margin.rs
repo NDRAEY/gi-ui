@@ -18,7 +18,7 @@ pub struct Margin {
 }
 
 impl Draw for Margin {
-    fn draw(&self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
         self.element
             .draw(canvas, x + self.margin.left, y + self.margin.top);
     }

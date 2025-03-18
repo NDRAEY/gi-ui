@@ -30,7 +30,7 @@ pub struct Text {
 }
 
 impl Draw for Text {
-    fn draw(&self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
         let mut layout_ref = self.prepare_layout();
         let layout = layout_ref.as_mut().unwrap();
 

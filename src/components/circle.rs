@@ -9,7 +9,7 @@ pub struct Circle {
 }
 
 impl Draw for Circle {
-    fn draw(&self, canvas: &mut Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
         self.draw_fill(
             canvas,
             x,

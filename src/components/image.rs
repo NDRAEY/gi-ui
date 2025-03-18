@@ -25,7 +25,7 @@ impl Size for Image {
 }
 
 impl Draw for Image {
-    fn draw(&self, canvas: &mut Canvas, sx: usize, sy: usize) {
+    fn draw(&mut self, canvas: &mut Canvas, sx: usize, sy: usize) {
         for y in 0..self.image_height {
             for x in 0..self.image_width {
                 canvas.set_pixel(sx + x, sy + y, self.image_data[y * self.image_width + x]);

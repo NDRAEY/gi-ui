@@ -59,12 +59,12 @@ impl Size for LinearLayout {
 }
 
 impl Draw for LinearLayout {
-    fn draw(&self, canvas: &mut Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
         let mut sx = (x as isize + self.margin.left) as usize;
         let mut sy = (y as isize + self.margin.top) as usize;
 
-        for element in &self.contained_widgets {
-            let element = element.borrow();
+        for element in &mut self.contained_widgets {
+            let mut element = element.borrow_mut();
             let (w, h) = element.size();
 
             element.draw(canvas, sx, sy);

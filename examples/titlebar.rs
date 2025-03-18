@@ -22,22 +22,22 @@ fn main() {
         .foreground_color(0xff_0000ff);
 
     let close_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(25).set_foreground_color(0xff_ff0000)),
-        10,
+        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_ff0000)),
+        0,
         0,
         10,
         0,
     );
     let minimize_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(25).set_foreground_color(0xff_ffff00)),
-        10,
+        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_ffff00)),
+        0,
         0,
         10,
         0,
     );
     let mut maximize_button = Touchable::with(Box::new(Margin::like_args(
-        Box::new(Circle::new().with_radius(25).set_foreground_color(0xff_00ff00)),
-        10,
+        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_00ff00)),
+        0,
         0,
         10,
         0,
@@ -58,6 +58,8 @@ fn main() {
     together.push(close_button);
     together.push(minimize_button);
     let btn = together.push(maximize_button);
+
+    let together = Margin::like_args(Box::new(together), 15, 15, 15, 15);
 
     bar.push(rect);
     bar.push(together);

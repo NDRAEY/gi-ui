@@ -2,6 +2,8 @@ use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
+use alloc::boxed::Box;
+
 type Element = Box<dyn Drawable>;
 
 #[derive(Default, Debug)]

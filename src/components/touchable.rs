@@ -2,6 +2,8 @@ use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
+use alloc::boxed::Box;
+
 type TouchListener = fn(&mut dyn Drawable, usize, usize);
 
 pub struct Touchable {

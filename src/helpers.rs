@@ -1,3 +1,4 @@
+#[cfg(not(feature = "no_std"))]
 use std::fs::File;
 
 use crate::canvas::Canvas;

@@ -103,4 +103,17 @@ impl Margin {
     pub fn element_mut(&mut self) -> &mut Element {
         &mut self.element
     }
+
+    pub fn passthrough<T: Drawable + 'static>(f: fn(&mut T, usize, usize))
+    -> impl FnMut(&mut dyn Drawable, usize, usize) {
+        move |element, x, y| {
+            let el: &mut Margin = element.as_any_mut().downcast_mut::<Margin>().unwrap();
+            
+            let pos = el.element_position();
+
+            let el: &mut T = el.element_mut().as_any_mut().downcast_mut::<T>().unwrap();
+
+            (f)(el, x.saturating_sub(pos.0), y.saturating_sub(pos.1));
+        }
+    }
 }

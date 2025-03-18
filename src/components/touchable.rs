@@ -4,11 +4,11 @@ use crate::Drawable;
 
 use alloc::boxed::Box;
 
-type TouchListener = fn(&mut dyn Drawable, usize, usize);
+pub type TouchListener = dyn FnMut(&mut dyn Drawable, usize, usize);
 
 pub struct Touchable {
     pub(crate) element: Box<dyn Drawable>,
-    pub(crate) touch_listener: TouchListener,
+    pub(crate) touch_listener: Box<TouchListener>,
 }
 
 impl Draw for Touchable {
@@ -40,11 +40,17 @@ impl Drawable for Touchable {
 impl Touchable {
     pub fn with(element: Box<dyn Drawable>) -> Self {
         Self {
-            element, touch_listener: |_, _, _| {}
+            element, touch_listener: Box::new(|_, _, _| {})
         }
     }
 
-    pub fn register_callback(&mut self, f: TouchListener) {
+    pub fn with_listener(element: Box<dyn Drawable>, listener: fn(&mut dyn Drawable, usize, usize)) -> Self {
+        Self {
+            element, touch_listener: Box::new(listener)
+        }
+    }
+
+    pub fn register_callback(&mut self, f: Box<TouchListener>) {
         self.touch_listener = f;
     }
 

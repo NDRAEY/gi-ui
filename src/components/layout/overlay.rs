@@ -1,4 +1,6 @@
+use core::cell::RefCell;
 use core::cmp::max;
+use alloc::rc::Rc;
 
 use alloc::{boxed::Box, vec::Vec};
 
@@ -6,7 +8,8 @@ use alloc::vec;
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
-type Drawables = Vec<Box<dyn Drawable>>;
+type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
+type Drawables = Vec<ContainerDrawable>;
 
 #[derive(Default)]
 pub struct OverlayLayout {
@@ -25,7 +28,7 @@ impl Size for OverlayLayout {
         let mut sy = 0usize;
 
         for element in &self.contained_widgets {
-            let (w, h) = element.size();
+            let (w, h) = element.borrow().size();
 
             sy = max(sy, h);
             sx = max(sx, w);
@@ -38,7 +41,7 @@ impl Size for OverlayLayout {
 impl Draw for OverlayLayout {
     fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
         for element in &mut self.contained_widgets {
-            element.draw(canvas, x, y);
+            element.borrow_mut().draw(canvas, x, y);
         }
     }
 }
@@ -60,7 +63,11 @@ impl OverlayLayout {
         }
     }
 
-    pub fn push(&mut self, element: impl Drawable + 'static) {
-        self.contained_widgets.push(Box::new(element));
+    pub fn push(&mut self, element: impl Drawable + 'static) -> Rc<RefCell<Box<dyn Drawable>>> {
+        let el: Rc<RefCell<Box<dyn Drawable>>> = Rc::new(RefCell::new(Box::new(element)));
+
+        self.contained_widgets.push(el.clone());
+
+        el
     }
 }

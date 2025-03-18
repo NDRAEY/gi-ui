@@ -1,7 +1,7 @@
 #[cfg(not(feature = "no_std"))]
 use std::fs::File;
 
-use crate::canvas::Canvas;
+use crate::{canvas::Canvas, Drawable};
 
 #[cfg(feature = "png")]
 pub fn export_to_png(canvas: &Canvas) {
@@ -25,4 +25,12 @@ pub fn export_to_png(canvas: &Canvas) {
 
         writer.write_image_data(buffer).unwrap();
     }
+}
+
+pub fn i_am_sure<T: Drawable + 'static>(element: &mut dyn Drawable) -> &T {
+    element.as_any().downcast_ref::<T>().unwrap()
+}
+
+pub fn i_am_sure_mut<T: Drawable + 'static>(element: &mut dyn Drawable) -> &mut T {
+    element.as_any_mut().downcast_mut::<T>().unwrap()
 }

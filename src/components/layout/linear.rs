@@ -6,6 +6,7 @@ use alloc::vec::Vec;
 use alloc::rc::Rc;
 
 use crate::canvas::Canvas;
+use crate::components::touchable::Touchable;
 use crate::draw::Draw;
 use crate::side::Side;
 use crate::size::Size;
@@ -141,5 +142,24 @@ impl LinearLayout {
         }
 
         None
+    }
+
+    pub fn process_touches(&mut self, x: usize, y: usize) {
+        for i in &self.contained_widgets {
+            let position = self.calculate_element_position(&i).unwrap();
+            let size = i.borrow().size();
+
+            if crate::rect::is_point(
+                (x, y),
+                (position.0, position.1, size.0, size.1)
+            ) {
+                let mut elem = i.borrow_mut();
+                let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
+
+                if let Some(elem) = elem {   
+                    elem.touch(x - position.0, y - position.1);
+                }
+            }
+        }
     }
 }

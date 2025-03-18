@@ -7,7 +7,9 @@ use zeraus::components::margin::Margin;
 use zeraus::components::rectangle::Rectangle;
 use zeraus::components::touchable::Touchable;
 use zeraus::draw::Draw;
+use zeraus::helpers::i_am_sure_mut;
 use zeraus::size::Size;
+use zeraus::Drawable;
 
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 200;
@@ -21,56 +23,77 @@ fn main() {
         .with_size(800, HEIGHT)
         .foreground_color(0xff_0000ff);
 
-    let close_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_ff0000)),
+    let close_button = Touchable::with_listener(Box::new(Margin::like_args(
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_ff0000),
+        ),
         0,
         0,
         10,
         0,
-    );
+    )), |e, _, _| {
+        println!("Clicked on close");
+
+        let elem: &mut Margin = i_am_sure_mut(e);
+        let elem: &mut Circle = i_am_sure_mut(elem.element_mut().as_mut());
+
+        *elem = elem.set_foreground_color(0xff_ffffff);
+    });
+
     let minimize_button = Margin::like_args(
-        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_ffff00)),
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_ffff00),
+        ),
         0,
         0,
         10,
         0,
     );
-    let mut maximize_button = Touchable::with(Box::new(Margin::like_args(
-        Box::new(Circle::new().with_radius(10).set_foreground_color(0xff_00ff00)),
+    let maximize_button = Margin::like_args(
+        Box::new(
+            Circle::new()
+                .with_radius(10)
+                .set_foreground_color(0xff_00ff00),
+        ),
         0,
         0,
         10,
         0,
-    )));
-
-    maximize_button.register_callback(|_elem, x, y| {
-        // let el: &mut Margin = _elem.as_any_mut().downcast_mut::<Margin>().unwrap();
-        // let el: &mut Circle = el.element_mut().as_any_mut().downcast_mut::<Circle>().unwrap();
-
-        // *el = el.set_foreground_color(0xff_fff00f);
-        
-        println!("Click at {}, {}", x, y);
-    });    
+    );
 
     let mut together = LinearLayout::new();
     together.set_direction(Direction::HORIZONTAL);
 
     together.push(close_button);
     together.push(minimize_button);
-    let btn = together.push(maximize_button);
+    together.push(maximize_button);
 
     let together = Margin::like_args(Box::new(together), 15, 15, 15, 15);
+    let mut together = Touchable::with(Box::new(together));
+
+    together.register_callback(Box::new(Margin::passthrough(
+        |elem: &mut LinearLayout, x, y| {
+            elem.process_touches(x, y);
+        },
+    )));
 
     bar.push(rect);
-    bar.push(together);
+    let clickable_layout = bar.push(together);
 
     let (total_width, total_height) = bar.size();
 
     {
-        let mut btn = btn.borrow_mut();
-        let btn: &mut Touchable = btn.as_any_mut().downcast_mut::<Touchable>().unwrap();
+        let mut clickable_layout = clickable_layout.borrow_mut();
+        let clickable_layout: &mut Touchable = clickable_layout
+            .as_any_mut()
+            .downcast_mut::<Touchable>()
+            .unwrap();
 
-        btn.touch(10, 15);
+        clickable_layout.touch(20, 20);
     }
 
     bar.draw(&mut canvas, 0, 0);

@@ -20,6 +20,7 @@ pub mod side;
 pub mod tests;
 
 pub mod helpers;
+pub mod rect;
 
 pub trait Drawable: draw::Draw + size::Size {
     fn as_any(&self) -> &dyn Any;

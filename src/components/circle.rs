@@ -1,6 +1,6 @@
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Copy)]
 pub struct Circle {
     pub(crate) radius: usize,
     pub(crate) foreground_color: u32,
@@ -45,6 +45,10 @@ impl Drawable for Circle {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
+    
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+        self
+    }
 }
 
 impl Circle {
@@ -62,15 +66,23 @@ impl Circle {
         self
     }
 
-    pub fn foreground_color(mut self, color: u32) -> Self {
+    pub fn set_foreground_color(mut self, color: u32) -> Self {
         self.foreground_color = color;
         self
     }
 
-    pub fn border(mut self, color: u32, size: usize) -> Self {
+    pub fn set_border(mut self, color: u32, size: usize) -> Self {
         self.border_color = color;
         self.border_size = size;
         self
+    }
+
+    pub fn foreground_color(&self) -> u32 {
+        self.foreground_color
+    }
+
+    pub fn border(&self) -> (u32, usize) {
+        (self.border_color, self.border_size)
     }
 
     fn draw_fill(&self, canvas: &mut Canvas, x: usize, y: usize, radius: usize, color: u32) {

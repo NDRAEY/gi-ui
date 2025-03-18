@@ -2,7 +2,7 @@ use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
-type Element = Box<(dyn Drawable + 'static)>;
+type Element = Box<dyn Drawable>;
 
 #[derive(Default, Debug)]
 pub struct MarginValue {
@@ -41,6 +41,10 @@ impl Size for Margin {
 
 impl Drawable for Margin {
     fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+    
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
         self
     }
 }
@@ -88,5 +92,13 @@ impl Margin {
 
     pub fn element_position(&self) -> (usize, usize) {
         (self.margin.left, self.margin.top)
+    }
+
+    pub fn element(&self) -> &Element {
+        &self.element
+    }
+
+    pub fn element_mut(&mut self) -> &mut Element {
+        &mut self.element
     }
 }

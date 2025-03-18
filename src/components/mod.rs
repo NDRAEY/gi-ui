@@ -6,3 +6,4 @@ pub mod widget;
 pub mod image;
 pub mod circle;
 pub mod margin;
+pub mod touchable;

@@ -98,6 +98,8 @@ fn main() {
 
     bar.draw(&mut canvas, 0, 0);
 
+    println!("{} {}", total_width, total_height);
+
     canvas.resize(total_width, total_height);
 
     zeraus::helpers::export_to_png(&canvas);

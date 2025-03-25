@@ -104,6 +104,7 @@ impl Canvas {
         self.framebuffer[position + 0] = ((a * b + inv_alpha * br) >> 8) as u8;
         self.framebuffer[position + 1] = ((a * g + inv_alpha * bg) >> 8) as u8;
         self.framebuffer[position + 2] = ((a * r + inv_alpha * bb) >> 8) as u8;
+        self.framebuffer[position + 3] = (a) as u8;
 
         Some(())
     }
@@ -136,7 +137,7 @@ impl Canvas {
 
         *self = canvas;
     }
-    
+
     pub fn fill(&mut self, color: u32) {
         for y in 0..self.height {
             for x in 0..self.width {
@@ -158,9 +159,11 @@ impl Size for Canvas {
 
 impl Draw for Canvas {
     fn draw(&mut self, canvas: &mut Canvas, sx: usize, sy: usize) {
-        for y in 0..canvas.height() {
-            for x in 0..canvas.width() {
-                self.blit(sx + x, sy + y, canvas.get_pixel(x, y).unwrap_or(0));
+        for y in 0..self.height() {
+            for x in 0..self.width() {
+                canvas.blit(sx + x, sy + y,
+                    self.get_pixel(x, y).unwrap_or(0)
+                );
             }
         }
     }

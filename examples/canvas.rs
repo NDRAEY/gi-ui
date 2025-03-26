@@ -1,4 +1,8 @@
-use zeraus::{canvas::Canvas, components::{layout::linear::LinearLayout, rectangle::Rectangle}, draw::Draw};
+use zeraus::{
+    canvas::Canvas,
+    components::{layout::linear::LinearLayout, rectangle::Rectangle},
+    draw::Draw,
+};
 
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 500;

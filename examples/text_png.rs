@@ -1,10 +1,6 @@
 use zeraus::{
     canvas::Canvas,
-    components::{
-        layout::overlay::OverlayLayout,
-        rectangle::Rectangle,
-        text::Text,
-    },
+    components::{layout::overlay::OverlayLayout, rectangle::Rectangle, text::Text},
     draw::Draw,
     size::Size,
 };

@@ -1,6 +1,6 @@
 use zeraus::canvas::Canvas;
-use zeraus::draw::Draw;
 use zeraus::components::image::Image;
+use zeraus::draw::Draw;
 use zeraus::size::Size;
 
 const WIDTH: usize = 1280;

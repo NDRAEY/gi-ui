@@ -42,7 +42,7 @@ impl<T: 'static + Drawable> Drawable for Margin<T> {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
-    
+
     fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
         self
     }
@@ -85,7 +85,7 @@ impl<T: 'static + Drawable> Margin<T> {
                 top,
                 right,
                 bottom,
-            }
+            },
         }
     }
 

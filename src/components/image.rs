@@ -50,11 +50,18 @@ impl Image {
 
         match im {
             Ok(image) => {
-                let pxls: Vec<_> = image.pixels().map(|a| {
-                    let mod_ = if image.image_data_bpp() == Bits24 { 0xff_000000 } else { 0 };
+                let pxls: Vec<_> = image
+                    .pixels()
+                    .map(|a| {
+                        let mod_ = if image.image_data_bpp() == Bits24 {
+                            0xff_000000
+                        } else {
+                            0
+                        };
 
-                    mod_ | a.color
-                }).collect();
+                        mod_ | a.color
+                    })
+                    .collect();
 
                 Some(Image {
                     image_width: image.size().width as usize,

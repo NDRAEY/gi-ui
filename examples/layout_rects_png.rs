@@ -43,7 +43,11 @@ fn main() {
     let layout2 = layout_common.push(layout2);
 
     println!("{} {}", layout.borrow().size().0, layout.borrow().size().1);
-    println!("{} {}", layout2.borrow().size().0, layout2.borrow().size().1);
+    println!(
+        "{} {}",
+        layout2.borrow().size().0,
+        layout2.borrow().size().1
+    );
 
     let (total_width, total_height) = layout_common.size();
 

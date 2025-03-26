@@ -1,3 +1,5 @@
+use core::any::Any;
+
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
@@ -28,25 +30,30 @@ impl Size for Touchable {
 }
 
 impl Drawable for Touchable {
-    fn as_any(&self) -> &dyn core::any::Any {
+    fn as_any(&self) -> &dyn Any {
         self
     }
 
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+    fn as_any_mut(&mut self) -> &mut dyn Any {
         self
     }
 }
 
 impl Touchable {
-    pub fn with(element: Box<dyn Drawable>) -> Self {
+    pub fn with(element: impl Drawable + 'static) -> Self {
         Self {
-            element, touch_listener: Box::new(|_, _, _| {})
+            element: Box::new(element),
+            touch_listener: Box::new(|_, _, _| {}),
         }
     }
 
-    pub fn with_listener(element: Box<dyn Drawable>, listener: fn(&mut dyn Drawable, usize, usize)) -> Self {
+    pub fn with_listener(
+        element: impl Drawable + 'static,
+        listener: fn(&mut dyn Drawable, usize, usize),
+    ) -> Self {
         Self {
-            element, touch_listener: Box::new(listener)
+            element: Box::new(element),
+            touch_listener: Box::new(listener),
         }
     }
 

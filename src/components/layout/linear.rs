@@ -157,8 +157,7 @@ impl LinearLayout {
             }
 
             let mut elem = i.borrow_mut();
-            let elem: Option<&mut Touchable> =
-                elem.as_any_mut().downcast_mut::<Touchable>();
+            let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
 
             if let Some(elem) = elem {
                 elem.touch(x - position.0, y - position.1);

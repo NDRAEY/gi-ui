@@ -15,7 +15,7 @@ impl Draw for Circle {
             x,
             y,
             self.radius + self.border_size,
-            self.border_color
+            self.border_color,
         );
 
         self.draw_fill(
@@ -23,7 +23,7 @@ impl Draw for Circle {
             x + self.border_size,
             y + self.border_size,
             self.radius,
-            self.foreground_color
+            self.foreground_color,
         );
     }
 }
@@ -45,7 +45,7 @@ impl Drawable for Circle {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
-    
+
     fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
         self
     }

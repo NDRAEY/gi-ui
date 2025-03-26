@@ -4,7 +4,7 @@ use core::cell::{RefCell, RefMut};
 use nostd::rc::Rc;
 
 #[cfg(not(feature = "no_std"))]
-use std::{rc::Rc, io::Read};
+use std::{io::Read, rc::Rc};
 
 use alloc::string::String;
 use alloc::string::ToString;
@@ -56,7 +56,11 @@ impl Draw for Text {
                     let result = ((alpha as u32) << 24) | color;
 
                     // And paint that pixel to canvas.
-                    canvas.blit(x + px + position.x as usize, y + py + position.y as usize, result);
+                    canvas.blit(
+                        x + px + position.x as usize,
+                        y + py + position.y as usize,
+                        result,
+                    );
                 }
             }
         }

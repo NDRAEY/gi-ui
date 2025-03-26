@@ -1,6 +1,6 @@
+use alloc::rc::Rc;
 use core::cell::RefCell;
 use core::cmp::max;
-use alloc::rc::Rc;
 
 use alloc::{boxed::Box, vec::Vec};
 

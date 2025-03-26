@@ -1,6 +1,6 @@
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
-#[derive(Default, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Circle {
     pub(crate) radius: usize,
     pub(crate) foreground_color: u32,

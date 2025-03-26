@@ -24,11 +24,9 @@ fn main() {
         .foreground_color(0xff_0000ff);
 
     let close_button = Touchable::with_listener(Box::new(Margin::like_args(
-        Box::new(
-            Circle::new()
-                .with_radius(10)
-                .set_foreground_color(0xff_ff0000),
-        ),
+        Circle::new()
+            .with_radius(10)
+            .set_foreground_color(0xff_ff0000),
         0,
         0,
         10,
@@ -36,29 +34,26 @@ fn main() {
     )), |e, _, _| {
         println!("Clicked on close");
 
-        let elem: &mut Margin = i_am_sure_mut(e);
-        let elem: &mut Circle = i_am_sure_mut(elem.element_mut().as_mut());
+        let elem: &mut Margin<Circle> = i_am_sure_mut(e);
 
-        *elem = elem.set_foreground_color(0xff_ffffff);
+        *elem.element_mut() = elem.element_mut().set_foreground_color(0xff_ffffff);
+        
+        println!("{elem:?}");
     });
 
     let minimize_button = Margin::like_args(
-        Box::new(
             Circle::new()
                 .with_radius(10)
                 .set_foreground_color(0xff_ffff00),
-        ),
         0,
         0,
         10,
         0,
     );
     let maximize_button = Margin::like_args(
-        Box::new(
             Circle::new()
                 .with_radius(10)
                 .set_foreground_color(0xff_00ff00),
-        ),
         0,
         0,
         10,
@@ -72,14 +67,15 @@ fn main() {
     together.push(minimize_button);
     together.push(maximize_button);
 
-    let together = Margin::like_args(Box::new(together), 15, 15, 15, 15);
+    let together = Margin::like_args(together, 15, 15, 15, 15);
     let mut together = Touchable::with(Box::new(together));
 
-    together.register_callback(Box::new(Margin::passthrough(
-        |elem: &mut LinearLayout, x, y| {
-            elem.process_touches(x, y);
+    together.register_callback(Box::new(
+        |elem: &mut dyn Drawable, x, y| {
+            let el = elem.as_any_mut().downcast_mut::<Margin<LinearLayout>>().unwrap();
+            el.element_mut().process_touches(x, y);
         },
-    )));
+    ));
 
     bar.push(rect);
     let clickable_layout = bar.push(together);

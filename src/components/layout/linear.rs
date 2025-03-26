@@ -2,8 +2,8 @@ use core::cell::RefCell;
 use core::cmp::max;
 
 use alloc::boxed::Box;
-use alloc::vec::Vec;
 use alloc::rc::Rc;
+use alloc::vec::Vec;
 
 use crate::canvas::Canvas;
 use crate::components::touchable::Touchable;
@@ -120,11 +120,14 @@ impl LinearLayout {
         };
     }
 
-    pub fn calculate_element_position(&self, element: &ContainerDrawable) -> Option<(usize, usize)> {
+    pub fn calculate_element_position(
+        &self,
+        element: &ContainerDrawable,
+    ) -> Option<(usize, usize)> {
         let mut sx = (0 as isize + self.margin.left) as usize;
         let mut sy = (0 as isize + self.margin.top) as usize;
 
-        for i in &self.contained_widgets {    
+        for i in &self.contained_widgets {
             let (w, h) = i.borrow().size();
 
             if i.as_ptr() == element.as_ptr() {
@@ -146,19 +149,19 @@ impl LinearLayout {
 
     pub fn process_touches(&mut self, x: usize, y: usize) {
         for i in &self.contained_widgets {
-            let position = self.calculate_element_position(&i).unwrap();
+            let position = self.calculate_element_position(i).unwrap();
             let size = i.borrow().size();
 
-            if crate::rect::is_point(
-                (x, y),
-                (position.0, position.1, size.0, size.1)
-            ) {
-                let mut elem = i.borrow_mut();
-                let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
+            if !crate::rect::is_point((x, y), (position.0, position.1, size.0, size.1)) {
+                continue;
+            }
 
-                if let Some(elem) = elem {   
-                    elem.touch(x - position.0, y - position.1);
-                }
+            let mut elem = i.borrow_mut();
+            let elem: Option<&mut Touchable> =
+                elem.as_any_mut().downcast_mut::<Touchable>();
+
+            if let Some(elem) = elem {
+                elem.touch(x - position.0, y - position.1);
             }
         }
     }

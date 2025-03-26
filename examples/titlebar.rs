@@ -37,8 +37,6 @@ fn main() {
         let elem: &mut Margin<Circle> = i_am_sure_mut(e);
 
         *elem.element_mut() = elem.element_mut().set_foreground_color(0xff_ffffff);
-        
-        println!("{elem:?}");
     });
 
     let minimize_button = Margin::like_args(

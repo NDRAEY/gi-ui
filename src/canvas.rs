@@ -99,7 +99,7 @@ impl Canvas {
         let bg: u32 = bg as u32;
         let bb: u32 = bb as u32;
 
-        let inv_alpha = 255 - a as u32;
+        let inv_alpha = 255 - a;
 
         self.framebuffer[position + 0] = ((a * b + inv_alpha * br) >> 8) as u8;
         self.framebuffer[position + 1] = ((a * g + inv_alpha * bg) >> 8) as u8;

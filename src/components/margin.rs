@@ -2,8 +2,6 @@ use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
-use alloc::boxed::Box;
-
 #[derive(Default, Debug)]
 pub struct MarginValue {
     pub left: usize,

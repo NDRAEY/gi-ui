@@ -9,7 +9,7 @@ fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT); // 100, 100
     canvas.fill(0xff_000000);
 
-    let circle = Circle::new()
+    let mut circle = Circle::new()
         .with_radius(25)
         .set_border(0xff_ffffff, 5)
         .set_foreground_color(0xff_0000aa);

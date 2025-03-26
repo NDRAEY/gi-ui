@@ -10,7 +10,7 @@ fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
 
     let data = std::fs::read("./static/test_image.tga").unwrap();
-    let image = Image::from_image_data(data.as_slice()).unwrap();
+    let mut image = Image::from_image_data(data.as_slice()).unwrap();
 
     image.draw(&mut canvas, 0, 0);
 

@@ -71,7 +71,7 @@ impl Canvas {
         let position = self.pixel_position(x, y);
         let (r, g, b, a) = Self::into_rgba(color);
 
-        self.framebuffer[position + 0] = r;
+        self.framebuffer[position] = r;
         self.framebuffer[position + 1] = g;
         self.framebuffer[position + 2] = b;
         self.framebuffer[position + 3] = a;
@@ -101,7 +101,7 @@ impl Canvas {
 
         let inv_alpha = 255 - a;
 
-        self.framebuffer[position + 0] = ((a * b + inv_alpha * br) >> 8) as u8;
+        self.framebuffer[position] = ((a * b + inv_alpha * br) >> 8) as u8;
         self.framebuffer[position + 1] = ((a * g + inv_alpha * bg) >> 8) as u8;
         self.framebuffer[position + 2] = ((a * r + inv_alpha * bb) >> 8) as u8;
         self.framebuffer[position + 3] = (a) as u8;
@@ -120,7 +120,7 @@ impl Canvas {
 
         let color = ((self.framebuffer[position] as u32) << 16)
             | ((self.framebuffer[position + 1] as u32) << 8)
-            | ((self.framebuffer[position + 2] as u32) << 0)
+            | ((self.framebuffer[position + 2] as u32))
             | ((self.framebuffer[position + 3] as u32) << 24);
 
         Some(color)

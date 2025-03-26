@@ -9,7 +9,7 @@ const HEIGHT: usize = 10;
 fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
 
-    let rect = Rectangle::new()
+    let mut rect = Rectangle::new()
         .with_size(WIDTH, HEIGHT)
         .borders(0xff_ff0000, 2)
         .foreground_color(0xff_ff00ff);

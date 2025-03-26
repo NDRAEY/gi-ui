@@ -124,8 +124,8 @@ impl LinearLayout {
         &self,
         element: &ContainerDrawable,
     ) -> Option<(usize, usize)> {
-        let mut sx = (0 as isize + self.margin.left) as usize;
-        let mut sy = (0 as isize + self.margin.top) as usize;
+        let mut sx = self.margin.left as usize;
+        let mut sy = self.margin.top as usize;
 
         for i in &self.contained_widgets {
             let (w, h) = i.borrow().size();

@@ -7,3 +7,4 @@ pub mod rectangle;
 pub mod text;
 pub mod touchable;
 pub mod widget;
+pub mod scrollview;

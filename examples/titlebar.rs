@@ -60,7 +60,7 @@ fn main() {
     );
 
     let mut together = LinearLayout::new();
-    together.set_direction(Direction::HORIZONTAL);
+    together.set_direction(Direction::Horizontal);
 
     together.push(close_button);
     together.push(minimize_button);

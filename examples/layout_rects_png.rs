@@ -29,12 +29,12 @@ fn main() {
 
     let mut layout = LinearLayout::new();
 
-    layout.set_direction(Direction::HORIZONTAL);
+    layout.set_direction(Direction::Horizontal);
     layout.push(rect1);
     layout.push(rect2);
 
     let mut layout2 = LinearLayout::new();
-    layout2.set_direction(Direction::HORIZONTAL);
+    layout2.set_direction(Direction::Horizontal);
     layout2.push(rect3);
     layout2.push(rect4);
 

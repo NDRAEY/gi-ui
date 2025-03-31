@@ -14,11 +14,11 @@ pub struct Rectangle {
 }
 
 impl Draw for Rectangle {
-    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
-        let ax = (x + self.width) - 1;
-        let ay = (y + self.height) - 1;
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
+        let ax = (x + self.width as isize) - 1;
+        let ay = (y + self.height as isize) - 1;
 
-        for b in 0..self.border_size {
+        for b in 0..self.border_size as isize {
             // Draw top and bottom borders
             for i in (x + b)..=(ax - b) {
                 canvas.set_pixel(i, y + b, self.border_color); // Top border
@@ -34,7 +34,7 @@ impl Draw for Rectangle {
 
         for cy in self.border_size..(self.height - self.border_size) {
             for cx in self.border_size..(self.width - self.border_size) {
-                canvas.set_pixel(x + cx, y + cy, self.foreground_color);
+                canvas.set_pixel(x + cx as isize, y + cy as isize, self.foreground_color);
             }
         }
     }

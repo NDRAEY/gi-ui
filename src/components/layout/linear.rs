@@ -41,11 +41,11 @@ impl Size for LinearLayout {
             let (w, h) = element.borrow().size();
 
             match self.direction {
-                Direction::VERTICAL => {
+                Direction::Vertical => {
                     sy += h as isize;
                     sx = max(sx, w as isize);
                 }
-                Direction::HORIZONTAL => {
+                Direction::Horizontal => {
                     sx += w as isize;
                     sy = max(sy, h as isize);
                 }
@@ -60,22 +60,22 @@ impl Size for LinearLayout {
 }
 
 impl Draw for LinearLayout {
-    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
-        let mut sx = (x as isize + self.margin.left) as usize;
-        let mut sy = (y as isize + self.margin.top) as usize;
+    fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
+        let mut sx = x + self.margin.left;
+        let mut sy = y + self.margin.top;
 
         for element in &mut self.contained_widgets {
             let mut element = element.borrow_mut();
             let (w, h) = element.size();
 
-            element.draw(canvas, sx, sy);
+            element.draw(canvas, sx as _, sy as _);
 
             match self.direction {
-                Direction::VERTICAL => {
-                    sy += h;
+                Direction::Vertical => {
+                    sy += h as isize;
                 }
-                Direction::HORIZONTAL => {
-                    sx += w;
+                Direction::Horizontal => {
+                    sx += w as isize;
                 }
             }
         }
@@ -135,10 +135,10 @@ impl LinearLayout {
             }
 
             match self.direction {
-                Direction::VERTICAL => {
+                Direction::Vertical => {
                     sy += h;
                 }
-                Direction::HORIZONTAL => {
+                Direction::Horizontal => {
                     sx += w;
                 }
             }

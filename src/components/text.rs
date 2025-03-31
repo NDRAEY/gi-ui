@@ -30,7 +30,7 @@ pub struct Text {
 }
 
 impl Draw for Text {
-    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         let mut layout_ref = self.prepare_layout();
         let layout = layout_ref.as_mut().unwrap();
 
@@ -57,8 +57,8 @@ impl Draw for Text {
 
                     // And paint that pixel to canvas.
                     canvas.blit(
-                        x + px + position.x as usize,
-                        y + py + position.y as usize,
+                        x + px as isize + position.x as isize,
+                        y + py as isize + position.y as isize,
                         result,
                     );
                 }

@@ -9,7 +9,7 @@ pub struct Circle {
 }
 
 impl Draw for Circle {
-    fn draw(&mut self, canvas: &mut Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         self.draw_fill(
             canvas,
             x,
@@ -20,8 +20,8 @@ impl Draw for Circle {
 
         self.draw_fill(
             canvas,
-            x + self.border_size,
-            y + self.border_size,
+            x + self.border_size as isize,
+            y + self.border_size as isize,
             self.radius,
             self.foreground_color,
         );
@@ -85,9 +85,9 @@ impl Circle {
         (self.border_color, self.border_size)
     }
 
-    fn draw_fill(&self, canvas: &mut Canvas, x: usize, y: usize, radius: usize, color: u32) {
-        let xc = x + radius;
-        let yc = y + radius;
+    fn draw_fill(&self, canvas: &mut Canvas, x: isize, y: isize, radius: usize, color: u32) {
+        let xc = x + radius as isize;
+        let yc = y + radius as isize;
         let r = radius as isize;
 
         let mut d = 3 - (2 * r);
@@ -142,6 +142,6 @@ fn draw_scanline(canvas: &mut Canvas, x_start: isize, x_end: isize, y: isize, co
     }
 
     for x in x_start.max(0)..=x_end {
-        canvas.set_pixel(x as usize, y as usize, color);
+        canvas.set_pixel(x, y, color);
     }
 }

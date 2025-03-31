@@ -17,9 +17,9 @@ pub struct Margin<T: Drawable> {
 }
 
 impl<T: Drawable> Draw for Margin<T> {
-    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         self.element
-            .draw(canvas, x + self.margin.left, y + self.margin.top);
+            .draw(canvas, x + self.margin.left as isize, y + self.margin.top as isize);
     }
 }
 

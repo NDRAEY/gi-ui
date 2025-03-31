@@ -17,11 +17,11 @@ fn simple_overlay_size() {
         .foreground_color(0xff_00ff00);
 
     let mut layout = LinearLayout::new();
-    layout.set_direction(Direction::HORIZONTAL);
+    layout.set_direction(Direction::Horizontal);
     layout.push(rect1);
 
     let mut layout2 = LinearLayout::new();
-    layout2.set_direction(Direction::HORIZONTAL);
+    layout2.set_direction(Direction::Horizontal);
     layout2.push(rect2);
 
     let mut lay = OverlayLayout::new();
@@ -42,11 +42,11 @@ fn overlay_but_second_layout_is_margined() {
         .foreground_color(0xff_00ff00);
 
     let mut layout = LinearLayout::new();
-    layout.set_direction(Direction::HORIZONTAL);
+    layout.set_direction(Direction::Horizontal);
     layout.push(rect1);
 
     let mut layout2 = LinearLayout::new();
-    layout2.set_direction(Direction::HORIZONTAL);
+    layout2.set_direction(Direction::Horizontal);
 
     // Here we add margin a margin to the second layout
     layout2.set_margin(5, 5, 0, 0);

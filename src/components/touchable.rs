@@ -16,7 +16,7 @@ pub struct Touchable {
 }
 
 impl Draw for Touchable {
-    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: usize, y: usize) {
+    fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         self.element.draw(canvas, x, y);
     }
 }

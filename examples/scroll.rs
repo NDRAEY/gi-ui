@@ -1,4 +1,3 @@
-use fontdue::layout::HorizontalAlign;
 use zeraus::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::Size};
 
 const WIDTH: usize = 150;
@@ -8,19 +7,19 @@ fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT); // 100, 100
     canvas.fill(0xff_444444);
 
-    let mut rect1 = Rectangle::new()
+    let rect1 = Rectangle::new()
         .with_size(50, 50)
         .foreground_color(0xff_aa00aa);
 
-    let mut rect2 = Rectangle::new()
+    let rect2 = Rectangle::new()
         .with_size(50, 50)
         .foreground_color(0xff_00aaaa);
 
-    let mut circle1 = Circle::new()
+    let circle1 = Circle::new()
         .with_radius(20)
         .set_foreground_color(0xff_a0a00a);
 
-    let mut circle2 = Circle::new()
+    let circle2 = Circle::new()
         .with_radius(25)
         .set_foreground_color(0xff_ab23fc);
 

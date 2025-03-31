@@ -97,30 +97,30 @@ impl Circle {
         while xi <= yi {
             draw_scanline(
                 canvas,
-                xc as isize - yi,
-                xc as isize + yi,
-                yc as isize + xi,
+                xc - yi,
+                xc + yi,
+                yc + xi,
                 color,
             );
             draw_scanline(
                 canvas,
-                xc as isize - yi,
-                xc as isize + yi,
-                yc as isize - xi,
+                xc - yi,
+                xc + yi,
+                yc - xi,
                 color,
             );
             draw_scanline(
                 canvas,
-                xc as isize - xi,
-                xc as isize + xi,
-                yc as isize + yi,
+                xc - xi,
+                xc + xi,
+                yc + yi,
                 color,
             );
             draw_scanline(
                 canvas,
-                xc as isize - xi,
-                xc as isize + xi,
-                yc as isize - yi,
+                xc - xi,
+                xc + xi,
+                yc - yi,
                 color,
             );
 

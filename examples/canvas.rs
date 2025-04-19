@@ -1,4 +1,4 @@
-use zeraus::{
+use gi_ui::{
     canvas::Canvas,
     components::{layout::linear::LinearLayout, rectangle::Rectangle},
     draw::Draw,
@@ -27,5 +27,5 @@ fn main() {
 
     lay.draw(&mut canvas, 0, 0);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

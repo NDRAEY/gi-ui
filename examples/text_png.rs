@@ -1,4 +1,4 @@
-use zeraus::{
+use gi_ui::{
     canvas::Canvas,
     components::{layout::overlay::OverlayLayout, rectangle::Rectangle, text::Text},
     draw::Draw,
@@ -16,7 +16,7 @@ fn main() {
         .with_font_file("./examples/Ubuntu-Regular.ttf")
         .unwrap()
         // .with_text("Aa");
-        .with_text("Zeraus!");
+        .with_text("It's Gi UI!!");
 
     let tsize = text.size();
 
@@ -36,5 +36,5 @@ fn main() {
 
     canvas.resize(total_width, total_height);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

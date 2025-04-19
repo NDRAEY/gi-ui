@@ -1,9 +1,9 @@
-use zeraus::canvas::Canvas;
-use zeraus::components::layout::linear::LinearLayout;
-use zeraus::components::layout::Direction;
-use zeraus::components::rectangle::Rectangle;
-use zeraus::draw::Draw;
-use zeraus::size::Size;
+use gi_ui::canvas::Canvas;
+use gi_ui::components::layout::linear::LinearLayout;
+use gi_ui::components::layout::Direction;
+use gi_ui::components::rectangle::Rectangle;
+use gi_ui::draw::Draw;
+use gi_ui::size::Size;
 
 const WIDTH: usize = 200;
 const HEIGHT: usize = 200;
@@ -55,5 +55,5 @@ fn main() {
 
     canvas.resize(total_width, total_height);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

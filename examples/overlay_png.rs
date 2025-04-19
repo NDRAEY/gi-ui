@@ -1,4 +1,4 @@
-use zeraus::{
+use gi_ui::{
     canvas::Canvas,
     components::{
         layout::{linear::LinearLayout, overlay::OverlayLayout, Direction},
@@ -41,5 +41,5 @@ fn main() {
 
     canvas.resize(total_width, total_height);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

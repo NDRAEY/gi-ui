@@ -1,15 +1,15 @@
-use zeraus::canvas::Canvas;
-use zeraus::components::circle::Circle;
-use zeraus::components::layout::linear::LinearLayout;
-use zeraus::components::layout::overlay::OverlayLayout;
-use zeraus::components::layout::Direction;
-use zeraus::components::margin::Margin;
-use zeraus::components::rectangle::Rectangle;
-use zeraus::components::touchable::Touchable;
-use zeraus::draw::Draw;
-use zeraus::helpers::i_am_sure_mut;
-use zeraus::size::Size;
-use zeraus::Drawable;
+use gi_ui::canvas::Canvas;
+use gi_ui::components::circle::Circle;
+use gi_ui::components::layout::linear::LinearLayout;
+use gi_ui::components::layout::overlay::OverlayLayout;
+use gi_ui::components::layout::Direction;
+use gi_ui::components::margin::Margin;
+use gi_ui::components::rectangle::Rectangle;
+use gi_ui::components::touchable::Touchable;
+use gi_ui::draw::Draw;
+use gi_ui::helpers::i_am_sure_mut;
+use gi_ui::size::Size;
+use gi_ui::Drawable;
 
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 200;
@@ -98,5 +98,5 @@ fn main() {
 
     canvas.resize(total_width, total_height);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

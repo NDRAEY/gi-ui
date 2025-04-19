@@ -1,6 +1,6 @@
-use zeraus::canvas::Canvas;
-use zeraus::components::circle::Circle;
-use zeraus::draw::Draw;
+use gi_ui::canvas::Canvas;
+use gi_ui::components::circle::Circle;
+use gi_ui::draw::Draw;
 
 const WIDTH: usize = 100;
 const HEIGHT: usize = 100;
@@ -16,5 +16,5 @@ fn main() {
 
     circle.draw(&mut canvas, 0, 0);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

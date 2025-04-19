@@ -1,4 +1,4 @@
-use zeraus::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::Size};
+use gi_ui::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::Size};
 
 const WIDTH: usize = 150;
 const HEIGHT: usize = 150;
@@ -24,12 +24,12 @@ fn main() {
         .set_foreground_color(0xff_ab23fc);
 
     let mut layout1 = LinearLayout::new();
-    layout1.set_direction(zeraus::components::layout::Direction::Horizontal);
+    layout1.set_direction(gi_ui::components::layout::Direction::Horizontal);
     layout1.push(rect1);
     layout1.push(rect2);
 
     let mut layout2 = LinearLayout::new();
-    layout2.set_direction(zeraus::components::layout::Direction::Horizontal);
+    layout2.set_direction(gi_ui::components::layout::Direction::Horizontal);
     layout2.push(circle1);
     layout2.push(circle2);
 
@@ -48,5 +48,5 @@ fn main() {
 
     // canvas.resize(size.0, size.1);
     
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

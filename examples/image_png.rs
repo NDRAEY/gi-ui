@@ -1,7 +1,7 @@
-use zeraus::canvas::Canvas;
-use zeraus::components::image::Image;
-use zeraus::draw::Draw;
-use zeraus::size::Size;
+use gi_ui::canvas::Canvas;
+use gi_ui::components::image::Image;
+use gi_ui::draw::Draw;
+use gi_ui::size::Size;
 
 const WIDTH: usize = 1280;
 const HEIGHT: usize = 1280;
@@ -18,5 +18,5 @@ fn main() {
     println!("{w} {h}");
     canvas.resize(w, h);
 
-    zeraus::helpers::export_to_png(&canvas);
+    gi_ui::helpers::export_to_png(&canvas);
 }

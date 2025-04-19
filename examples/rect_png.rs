@@ -1,7 +1,7 @@
 use std::fs::File;
-use zeraus::canvas::Canvas;
-use zeraus::components::rectangle::Rectangle;
-use zeraus::draw::Draw;
+use gi_ui::canvas::Canvas;
+use gi_ui::components::rectangle::Rectangle;
+use gi_ui::draw::Draw;
 
 const WIDTH: usize = 10;
 const HEIGHT: usize = 10;

@@ -6,18 +6,20 @@ use alloc::{boxed::Box, vec::Vec};
 
 use alloc::vec;
 
+use crate::parent::HasParent;
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;
 
 #[derive(Default)]
-pub struct OverlayLayout {
+pub struct OverlayLayout<'a> {
+    pub(crate) parent: Option<&'a dyn Drawable>,
     //pub(crate) widget: Widget,
     pub(crate) contained_widgets: Drawables,
 }
 
-impl Size for OverlayLayout {
+impl Size for OverlayLayout<'_> {
     fn set_size(&mut self, _x: usize, _y: usize) {
         unreachable!();
     }
@@ -38,7 +40,7 @@ impl Size for OverlayLayout {
     }
 }
 
-impl Draw for OverlayLayout {
+impl Draw for OverlayLayout<'_> {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         for element in &mut self.contained_widgets {
             element.borrow_mut().draw(canvas, x, y);
@@ -46,7 +48,7 @@ impl Draw for OverlayLayout {
     }
 }
 
-impl Drawable for OverlayLayout {
+impl Drawable for OverlayLayout<'static> {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
@@ -56,9 +58,10 @@ impl Drawable for OverlayLayout {
     }
 }
 
-impl OverlayLayout {
+impl OverlayLayout<'_> {
     pub fn new() -> Self {
         Self {
+            parent: None,
             contained_widgets: vec![],
         }
     }
@@ -69,5 +72,11 @@ impl OverlayLayout {
         self.contained_widgets.push(el.clone());
 
         el
+    }
+}
+
+impl HasParent<'_> for OverlayLayout<'_> {
+    fn parent(&self) -> Option<&dyn Drawable> {
+        self.parent
     }
 }

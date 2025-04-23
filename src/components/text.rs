@@ -15,11 +15,13 @@ use fontdue::{
     FontSettings,
 };
 
+use crate::parent::HasParent;
 use crate::{draw::Draw, size::Size, Drawable};
 
 #[derive(Default, Clone)]
-pub struct Text {
+pub struct Text<'a> {
     //pub(crate) widget: widget::Widget,
+    pub(crate) parent: Option<&'a dyn Drawable>,
     pub(crate) color: u32,
     pub(crate) text: String,
     pub(crate) size: usize,
@@ -29,7 +31,7 @@ pub struct Text {
     layout: Rc<RefCell<Option<fontdue::layout::Layout>>>,
 }
 
-impl Draw for Text {
+impl Draw for Text<'_> {
     fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         let mut layout_ref = self.prepare_layout();
         let layout = layout_ref.as_mut().unwrap();
@@ -67,7 +69,7 @@ impl Draw for Text {
     }
 }
 
-impl Size for Text {
+impl Size for Text<'_> {
     fn set_size(&mut self, _: usize, _: usize) {
         unreachable!();
     }
@@ -83,7 +85,7 @@ impl Size for Text {
     }
 }
 
-impl Drawable for Text {
+impl Drawable for Text<'static> {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
@@ -93,7 +95,7 @@ impl Drawable for Text {
     }
 }
 
-impl Text {
+impl Text<'_> {
     pub fn new() -> Self {
         let mut layout = Layout::new(CoordinateSystem::PositiveYDown);
         layout.reset(&LayoutSettings {
@@ -101,8 +103,8 @@ impl Text {
         });
 
         Self {
-            // color: 0xff_000000,
-            color: 0xff_0000ff,
+            parent: None,
+            color: 0xff_000000,
             text: "".to_string(),
             size: 18,
             font: None,
@@ -157,5 +159,17 @@ impl Text {
         layout.append(fonts, &TextStyle::new(&self.text, self.size as f32, 0));
 
         almost_layout
+    }
+}
+
+impl<'a> HasParent<'a> for Text<'a> {
+    fn parent(&self) -> Option<&dyn Drawable> {
+        None
+    }
+    
+    fn set_parent(&mut self, parent: &'a dyn Drawable) {
+        self.parent = Some(parent);
+
+        core::todo!();
     }
 }

@@ -8,6 +8,7 @@ use alloc::vec::Vec;
 use crate::canvas::Canvas;
 use crate::components::touchable::Touchable;
 use crate::draw::Draw;
+use crate::parent::HasParent;
 use crate::side::Side;
 use crate::size::Size;
 use crate::{alignment, Drawable};
@@ -19,7 +20,8 @@ type Drawables = Vec<ContainerDrawable>;
 
 // TODO: Add alignment
 #[derive(Default)]
-pub struct LinearLayout {
+pub struct LinearLayout<'a> {
+    pub(crate) parent: Option<&'a dyn Drawable>,
     pub(crate) contained_widgets: Drawables,
     pub direction: Direction,
     pub horizontal_alignment: alignment::HorizontalAlignment,
@@ -27,7 +29,7 @@ pub struct LinearLayout {
     pub margin: crate::side::Side,
 }
 
-impl Size for LinearLayout {
+impl Size for LinearLayout<'_> {
     fn set_size(&mut self, _x: usize, _y: usize) {
         unreachable!();
     }
@@ -59,7 +61,7 @@ impl Size for LinearLayout {
     }
 }
 
-impl Draw for LinearLayout {
+impl Draw for LinearLayout<'_> {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         let mut sx = x + self.margin.left;
         let mut sy = y + self.margin.top;
@@ -82,7 +84,7 @@ impl Draw for LinearLayout {
     }
 }
 
-impl Drawable for LinearLayout {
+impl Drawable for LinearLayout<'static> {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
@@ -92,7 +94,7 @@ impl Drawable for LinearLayout {
     }
 }
 
-impl LinearLayout {
+impl LinearLayout<'_> {
     pub fn new() -> Self {
         Self {
             ..Default::default()
@@ -163,5 +165,11 @@ impl LinearLayout {
                 elem.touch(x - position.0, y - position.1);
             }
         }
+    }
+}
+
+impl HasParent<'_> for LinearLayout<'_> {
+    fn parent(&self) -> Option<&dyn Drawable> {
+        self.parent
     }
 }

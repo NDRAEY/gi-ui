@@ -1,8 +1,5 @@
 use crate::{
-    canvas::Canvas,
-    draw::Draw,
-    size::{Size, SizePolicy},
-    Drawable,
+    canvas::Canvas, draw::Draw, parent::HasParent, size::{Size, SizePolicy}, Drawable
 };
 
 #[derive(Clone, Copy)]
@@ -12,6 +9,12 @@ pub struct Circle<'a> {
     pub(crate) foreground_color: u32,
     pub(crate) border_color: u32,
     pub(crate) border_size: usize,
+}
+
+impl HasParent<'_> for Circle<'_> {
+    fn parent(&self) -> Option<&dyn Drawable> {
+        self.parent
+    }
 }
 
 impl Draw for Circle<'_> {

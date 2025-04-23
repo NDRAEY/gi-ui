@@ -1,4 +1,4 @@
-use gi_ui::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::Size};
+use gi_ui::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::{Size, SizePolicy}};
 
 const WIDTH: usize = 150;
 const HEIGHT: usize = 150;

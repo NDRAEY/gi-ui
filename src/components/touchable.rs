@@ -8,20 +8,21 @@ use alloc::boxed::Box;
 
 pub type TouchListener = dyn FnMut(&mut dyn Drawable, usize, usize);
 
-pub struct Touchable {
+pub struct Touchable<'a> {
+    pub(crate) parent: Option<&'a dyn Drawable>,
     pub(crate) element: Box<dyn Drawable>,
     pub(crate) mousedown_listener: Box<TouchListener>,
     pub(crate) mouseup_listener: Box<TouchListener>,
     pub(crate) touch_listener: Box<TouchListener>,
 }
 
-impl Draw for Touchable {
+impl Draw for Touchable<'_> {
     fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         self.element.draw(canvas, x, y);
     }
 }
 
-impl Size for Touchable {
+impl Size for Touchable<'_> {
     fn set_size(&mut self, x: usize, y: usize) {
         self.element.set_size(x, y);
     }
@@ -31,7 +32,7 @@ impl Size for Touchable {
     }
 }
 
-impl Drawable for Touchable {
+impl Drawable for Touchable<'static> {
     fn as_any(&self) -> &dyn Any {
         self
     }
@@ -41,9 +42,10 @@ impl Drawable for Touchable {
     }
 }
 
-impl Touchable {
+impl Touchable<'_> {
     pub fn new(element: impl Drawable + 'static) -> Self {
         Self {
+            parent: None,
             element: Box::new(element),
             touch_listener: Box::new(|_, _, _| {}),
             mouseup_listener: Box::new(|_, _, _| {}),

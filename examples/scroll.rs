@@ -16,11 +16,11 @@ fn main() {
         .foreground_color(0xff_00aaaa);
 
     let circle1 = Circle::new()
-        .with_radius(20)
+        .with_radius(SizePolicy::Fixed(20))
         .set_foreground_color(0xff_a0a00a);
 
     let circle2 = Circle::new()
-        .with_radius(25)
+        .with_radius(SizePolicy::Fixed(25))
         .set_foreground_color(0xff_ab23fc);
 
     let mut layout1 = LinearLayout::new();

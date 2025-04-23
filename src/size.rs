@@ -1,3 +1,9 @@
+#[derive(Debug, Clone, Copy)]
+pub enum SizePolicy {
+    Fixed(usize),
+    FillParent
+}
+
 pub trait Size {
     fn set_size(&mut self, x: usize, y: usize);
     fn size(&self) -> (usize, usize);

@@ -1,47 +1,51 @@
-use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
+use crate::{
+    canvas::Canvas,
+    draw::Draw,
+    size::{Size, SizePolicy},
+    Drawable,
+};
 
-#[derive(Debug, Default, Clone, Copy)]
-pub struct Circle {
-    pub(crate) radius: usize,
+#[derive(Clone, Copy)]
+pub struct Circle<'a> {
+    pub(crate) parent: Option<&'a dyn Drawable>,
+    pub(crate) radius: SizePolicy,
     pub(crate) foreground_color: u32,
     pub(crate) border_color: u32,
     pub(crate) border_size: usize,
 }
 
-impl Draw for Circle {
+impl Draw for Circle<'_> {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
-        self.draw_fill(
-            canvas,
-            x,
-            y,
-            self.radius + self.border_size,
-            self.border_color,
-        );
+        let radius = self.calculate_radius(Some(canvas));
+
+        self.draw_fill(canvas, x, y, radius + self.border_size, self.border_color);
 
         self.draw_fill(
             canvas,
             x + self.border_size as isize,
             y + self.border_size as isize,
-            self.radius,
+            radius,
             self.foreground_color,
         );
     }
 }
 
-impl Size for Circle {
+impl Size for Circle<'_> {
     fn set_size(&mut self, _x: usize, _y: usize) {
         unreachable!();
     }
 
     fn size(&self) -> (usize, usize) {
+        let radius = self.calculate_radius(None);
+
         (
-            (self.radius * 2) + self.border_size,
-            (self.radius * 2) + self.border_size,
+            (radius * 2) + self.border_size,
+            (radius * 2) + self.border_size,
         )
     }
 }
 
-impl Drawable for Circle {
+impl Drawable for Circle<'static> {
     fn as_any(&self) -> &dyn core::any::Any {
         self
     }
@@ -51,17 +55,32 @@ impl Drawable for Circle {
     }
 }
 
-impl Circle {
+impl Circle<'_> {
     pub fn new() -> Self {
-        Circle {
-            radius: 0,
+        Self {
+            parent: None,
+            radius: SizePolicy::FillParent,
             foreground_color: 0x00_000000,
             border_color: 0x00_000000,
             border_size: 0,
         }
     }
 
-    pub fn with_radius(mut self, radius: usize) -> Self {
+    pub fn calculate_radius(&self, canvas: Option<&Canvas>) -> usize {
+        match self.radius {
+            SizePolicy::Fixed(sz) => sz,
+            SizePolicy::FillParent => self
+                .parent
+                .map(|a| (a.size().0 / 2) - self.border_size)
+                .unwrap_or(
+                    canvas
+                        .map(|a| (a.width() / 2) - self.border_size)
+                        .unwrap_or(0),
+                ),
+        }
+    }
+
+    pub fn with_radius(mut self, radius: SizePolicy) -> Self {
         self.radius = radius;
         self
     }
@@ -95,34 +114,10 @@ impl Circle {
         let mut yi = r;
 
         while xi <= yi {
-            draw_scanline(
-                canvas,
-                xc - yi,
-                xc + yi,
-                yc + xi,
-                color,
-            );
-            draw_scanline(
-                canvas,
-                xc - yi,
-                xc + yi,
-                yc - xi,
-                color,
-            );
-            draw_scanline(
-                canvas,
-                xc - xi,
-                xc + xi,
-                yc + yi,
-                color,
-            );
-            draw_scanline(
-                canvas,
-                xc - xi,
-                xc + xi,
-                yc - yi,
-                color,
-            );
+            draw_scanline(canvas, xc - yi, xc + yi, yc + xi, color);
+            draw_scanline(canvas, xc - yi, xc + yi, yc - xi, color);
+            draw_scanline(canvas, xc - xi, xc + xi, yc + yi, color);
+            draw_scanline(canvas, xc - xi, xc + xi, yc - yi, color);
 
             if d < 0 {
                 d += (4 * xi) + 6;

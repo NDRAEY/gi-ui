@@ -127,7 +127,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gi_ui"
+name = "gi-ui"
 version = "0.1.0"
 dependencies = [
  "embedded-graphics",

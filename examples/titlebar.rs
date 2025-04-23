@@ -8,7 +8,7 @@ use gi_ui::components::rectangle::Rectangle;
 use gi_ui::components::touchable::Touchable;
 use gi_ui::draw::Draw;
 use gi_ui::helpers::i_am_sure_mut;
-use gi_ui::size::Size;
+use gi_ui::size::{Size, SizePolicy};
 use gi_ui::Drawable;
 
 const WIDTH: usize = 1000;
@@ -25,7 +25,7 @@ fn main() {
 
     let close_button = Touchable::new(Margin::like_args(
         Circle::new()
-            .with_radius(10)
+            .with_radius(SizePolicy::Fixed(10))
             .set_foreground_color(0xff_ff0000),
         0,
         0,
@@ -42,7 +42,7 @@ fn main() {
 
     let minimize_button = Margin::like_args(
         Circle::new()
-            .with_radius(10)
+            .with_radius(SizePolicy::Fixed(10))
             .set_foreground_color(0xff_ffff00),
         0,
         0,
@@ -51,7 +51,7 @@ fn main() {
     );
     let maximize_button = Margin::like_args(
         Circle::new()
-            .with_radius(10)
+            .with_radius(SizePolicy::Fixed(10))
             .set_foreground_color(0xff_00ff00),
         0,
         0,

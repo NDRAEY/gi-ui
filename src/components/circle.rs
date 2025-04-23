@@ -77,7 +77,7 @@ impl Circle<'_> {
                 .map(|a| (a.size().0 / 2) - self.border_size)
                 .unwrap_or(
                     canvas
-                        .map(|a| (a.width() / 2) - self.border_size)
+                        .map(|a| (core::cmp::min(a.width(), a.height()) / 2) - self.border_size)
                         .unwrap_or(0),
                 ),
         }

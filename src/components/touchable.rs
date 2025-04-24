@@ -1,4 +1,3 @@
-use core::any::Any;
 
 use crate::draw::Draw;
 use crate::size::Size;

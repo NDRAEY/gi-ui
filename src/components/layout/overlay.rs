@@ -10,7 +10,6 @@ use alloc::vec;
 use crate::parent::HasParent;
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
-use core::any::Any;
 
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;

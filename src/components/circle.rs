@@ -7,7 +7,6 @@ use crate::{
     size::{Size, SizePolicy},
     Drawable,
 };
-use core::any::Any;
 
 #[with_parent]
 #[derive(Clone, Copy, Widget)]
@@ -52,6 +51,12 @@ impl Size for Circle<'_> {
             (radius * 2) + self.border_size,
             (radius * 2) + self.border_size,
         )
+    }
+}
+
+impl Default for Circle<'_> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

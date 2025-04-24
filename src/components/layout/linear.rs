@@ -16,7 +16,6 @@ use crate::{alignment, Drawable};
 
 use super::Direction;
 
-use core::any::Any;
 
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;

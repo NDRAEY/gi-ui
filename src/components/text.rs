@@ -10,7 +10,6 @@ use std::{io::Read, rc::Rc};
 
 use alloc::string::String;
 use alloc::string::ToString;
-use core::any::Any;
 
 use fontdue::{
     self,

@@ -1,4 +1,11 @@
-use gi_ui::{canvas::Canvas, components::{circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView}, draw::Draw, size::{Size, SizePolicy}};
+use gi_ui::{
+    canvas::Canvas,
+    components::{
+        circle::Circle, layout::linear::LinearLayout, rectangle::Rectangle, scrollview::ScrollView,
+    },
+    draw::Draw,
+    size::{Size, SizePolicy},
+};
 
 const WIDTH: usize = 150;
 const HEIGHT: usize = 150;
@@ -47,6 +54,6 @@ fn main() {
     limited_layout.draw(&mut canvas, 0, 0);
 
     // canvas.resize(size.0, size.1);
-    
+
     gi_ui::helpers::export_to_png(&canvas);
 }

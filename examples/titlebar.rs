@@ -67,15 +67,13 @@ fn main() {
     together.push(maximize_button);
 
     let together = Margin::like_args(together, 15, 15, 15, 15);
-    let together =
-        Touchable::new(together).with_touch_listener(
-            |elem: &mut dyn Drawable, x, y| {
-            let el = elem
-                .as_any_mut()
-                .downcast_mut::<Margin<LinearLayout>>()
-                .unwrap();
-            el.element_mut().process_touches(x, y);
-        });
+    let together = Touchable::new(together).with_touch_listener(|elem: &mut dyn Drawable, x, y| {
+        let el = elem
+            .as_any_mut()
+            .downcast_mut::<Margin<LinearLayout>>()
+            .unwrap();
+        el.element_mut().process_touches(x, y);
+    });
 
     bar.push(rect);
     let clickable_layout = bar.push(together);

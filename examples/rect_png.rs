@@ -1,7 +1,7 @@
-use std::fs::File;
 use gi_ui::canvas::Canvas;
 use gi_ui::components::rectangle::Rectangle;
 use gi_ui::draw::Draw;
+use std::fs::File;
 
 const WIDTH: usize = 10;
 const HEIGHT: usize = 10;

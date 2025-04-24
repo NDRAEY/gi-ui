@@ -1,7 +1,7 @@
 use alloc::rc::Rc;
-use gi_derive::{with_parent, Widget};
 use core::cell::RefCell;
 use core::cmp::max;
+use gi_derive::{with_parent, Widget};
 
 use alloc::{boxed::Box, vec::Vec};
 

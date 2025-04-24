@@ -1,6 +1,5 @@
 use gi_derive::{with_parent, Widget};
 
-use core::any::Any;
 use crate::{
     canvas::Canvas,
     draw::Draw,
@@ -8,6 +7,7 @@ use crate::{
     size::{Size, SizePolicy},
     Drawable,
 };
+use core::any::Any;
 
 #[with_parent]
 #[derive(Clone, Copy, Widget)]

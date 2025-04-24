@@ -8,9 +8,9 @@ use nostd::rc::Rc;
 #[cfg(not(feature = "no_std"))]
 use std::{io::Read, rc::Rc};
 
-use core::any::Any;
 use alloc::string::String;
 use alloc::string::ToString;
+use core::any::Any;
 
 use fontdue::{
     self,
@@ -158,7 +158,7 @@ impl<'a> HasParent<'a> for Text<'a> {
     fn parent(&self) -> Option<&dyn Drawable> {
         None
     }
-    
+
     fn set_parent(&mut self, parent: &'a dyn Drawable) {
         self.parent = Some(parent);
 

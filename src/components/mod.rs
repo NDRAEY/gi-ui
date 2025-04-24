@@ -3,8 +3,8 @@ pub mod image;
 pub mod layout;
 pub mod margin;
 pub mod rectangle;
+pub mod scrollview;
 #[cfg(feature = "text")]
 pub mod text;
 pub mod touchable;
 pub mod widget;
-pub mod scrollview;

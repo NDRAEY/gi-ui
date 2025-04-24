@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, Copy)]
 pub enum SizePolicy {
     Fixed(usize),
-    FillParent
+    FillParent,
 }
 
 pub trait Size {

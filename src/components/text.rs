@@ -1,11 +1,14 @@
 use core::cell::{RefCell, RefMut};
 
+use gi_derive::with_parent;
+use gi_derive::Widget;
 #[cfg(feature = "no_std")]
 use nostd::rc::Rc;
 
 #[cfg(not(feature = "no_std"))]
 use std::{io::Read, rc::Rc};
 
+use core::any::Any;
 use alloc::string::String;
 use alloc::string::ToString;
 
@@ -18,10 +21,9 @@ use fontdue::{
 use crate::parent::HasParent;
 use crate::{draw::Draw, size::Size, Drawable};
 
-#[derive(Default, Clone)]
+#[with_parent]
+#[derive(Default, Clone, Widget)]
 pub struct Text<'a> {
-    //pub(crate) widget: widget::Widget,
-    pub(crate) parent: Option<&'a dyn Drawable>,
     pub(crate) color: u32,
     pub(crate) text: String,
     pub(crate) size: usize,
@@ -82,16 +84,6 @@ impl Size for Text<'_> {
         let width = last_character.x as usize + last_character.width;
 
         (width, layout.height() as usize)
-    }
-}
-
-impl Drawable for Text<'static> {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

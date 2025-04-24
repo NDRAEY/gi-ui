@@ -4,11 +4,13 @@ pub const BITS_PER_PIXEL: usize = 32;
 
 use alloc::vec;
 use alloc::vec::Vec;
+use gi_derive::Widget;
 
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
+#[derive(Widget)]
 pub struct Canvas {
     framebuffer: Vec<u8>,
     width: usize,
@@ -173,15 +175,5 @@ impl Draw for Canvas {
                 canvas.blit(sx + x, sy + y, self.get_pixel(x as _, y as _).unwrap_or(0));
             }
         }
-    }
-}
-
-impl Drawable for Canvas {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }

@@ -5,11 +5,13 @@ use crate::size::Size;
 use crate::Drawable;
 
 use alloc::boxed::Box;
+use gi_derive::{with_parent, Widget};
 
 pub type TouchListener = dyn FnMut(&mut dyn Drawable, usize, usize);
 
-pub struct Touchable<'a> {
-    pub(crate) parent: Option<&'a dyn Drawable>,
+#[with_parent]
+#[derive(Widget)]
+pub struct Touchable {
     pub(crate) element: Box<dyn Drawable>,
     pub(crate) mousedown_listener: Box<TouchListener>,
     pub(crate) mouseup_listener: Box<TouchListener>,
@@ -32,16 +34,6 @@ impl Size for Touchable<'_> {
     }
 }
 
-impl Drawable for Touchable<'static> {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
-}
-
 impl Touchable<'_> {
     pub fn new(element: impl Drawable + 'static) -> Self {
         Self {
@@ -53,28 +45,19 @@ impl Touchable<'_> {
         }
     }
 
-    pub fn with_touch_listener(
-        self,
-        listener: fn(&mut dyn Drawable, usize, usize),
-    ) -> Self {
+    pub fn with_touch_listener(self, listener: fn(&mut dyn Drawable, usize, usize)) -> Self {
         let mut touchable = self;
         touchable.touch_listener = Box::new(listener);
         touchable
     }
 
-    pub fn with_mouseup_listener(
-        self,
-        listener: fn(&mut dyn Drawable, usize, usize),
-    ) -> Self {
+    pub fn with_mouseup_listener(self, listener: fn(&mut dyn Drawable, usize, usize)) -> Self {
         let mut touchable = self;
         touchable.mouseup_listener = Box::new(listener);
         touchable
     }
 
-    pub fn with_mousedown_listener(
-        self,
-        listener: fn(&mut dyn Drawable, usize, usize),
-    ) -> Self {
+    pub fn with_mousedown_listener(self, listener: fn(&mut dyn Drawable, usize, usize)) -> Self {
         let mut touchable = self;
         touchable.mousedown_listener = Box::new(listener);
         touchable
@@ -83,11 +66,11 @@ impl Touchable<'_> {
     pub fn touch(&mut self, x: usize, y: usize) {
         (self.touch_listener)(self.element.as_mut(), x, y);
     }
-    
+
     pub fn mouse_up(&mut self, x: usize, y: usize) {
         (self.mouseup_listener)(self.element.as_mut(), x, y);
     }
-    
+
     pub fn mouse_down(&mut self, x: usize, y: usize) {
         (self.mousedown_listener)(self.element.as_mut(), x, y);
     }

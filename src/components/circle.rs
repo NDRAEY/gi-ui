@@ -1,10 +1,17 @@
+use gi_derive::{with_parent, Widget};
+
+use core::any::Any;
 use crate::{
-    canvas::Canvas, draw::Draw, parent::HasParent, size::{Size, SizePolicy}, Drawable
+    canvas::Canvas,
+    draw::Draw,
+    parent::HasParent,
+    size::{Size, SizePolicy},
+    Drawable,
 };
 
-#[derive(Clone, Copy)]
-pub struct Circle<'a> {
-    pub(crate) parent: Option<&'a dyn Drawable>,
+#[with_parent]
+#[derive(Clone, Copy, Widget)]
+pub struct Circle {
     pub(crate) radius: SizePolicy,
     pub(crate) foreground_color: u32,
     pub(crate) border_color: u32,
@@ -45,16 +52,6 @@ impl Size for Circle<'_> {
             (radius * 2) + self.border_size,
             (radius * 2) + self.border_size,
         )
-    }
-}
-
-impl Drawable for Circle<'static> {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

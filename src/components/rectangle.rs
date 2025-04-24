@@ -1,11 +1,12 @@
+use gi_derive::Widget;
+
 //use crate::components::widget;
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Widget)]
 pub struct Rectangle {
-    //pub(crate) widget: widget::Widget,
     pub(crate) width: usize,
     pub(crate) height: usize,
     pub(crate) border_color: u32,
@@ -48,16 +49,6 @@ impl Size for Rectangle {
 
     fn size(&self) -> (usize, usize) {
         (self.width, self.height)
-    }
-}
-
-impl Drawable for Rectangle {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

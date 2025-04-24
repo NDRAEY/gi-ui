@@ -1,4 +1,5 @@
 use alloc::rc::Rc;
+use gi_derive::{with_parent, Widget};
 use core::cell::RefCell;
 use core::cmp::max;
 
@@ -9,13 +10,14 @@ use alloc::vec;
 use crate::parent::HasParent;
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
 
+use core::any::Any;
+
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;
 
-#[derive(Default)]
+#[with_parent]
+#[derive(Default, Widget)]
 pub struct OverlayLayout<'a> {
-    pub(crate) parent: Option<&'a dyn Drawable>,
-    //pub(crate) widget: Widget,
     pub(crate) contained_widgets: Drawables,
 }
 
@@ -45,16 +47,6 @@ impl Draw for OverlayLayout<'_> {
         for element in &mut self.contained_widgets {
             element.borrow_mut().draw(canvas, x, y);
         }
-    }
-}
-
-impl Drawable for OverlayLayout<'static> {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

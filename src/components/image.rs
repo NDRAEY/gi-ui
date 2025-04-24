@@ -1,3 +1,4 @@
+use gi_derive::Widget;
 use tinytga::{ParseError, RawTga};
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
@@ -5,7 +6,7 @@ use tinytga::Bpp::Bits24;
 
 use alloc::vec::Vec;
 
-#[derive(Clone)]
+#[derive(Clone, Widget)]
 pub struct Image {
     //pub(crate) widget: widget::Widget,
     pub(crate) image_width: usize,
@@ -31,16 +32,6 @@ impl Draw for Image {
                 canvas.set_pixel(sx + x as isize, sy + y as isize, self.image_data[y * self.image_width + x]);
             }
         }
-    }
-}
-
-impl Drawable for Image {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

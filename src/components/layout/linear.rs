@@ -4,6 +4,7 @@ use core::cmp::max;
 use alloc::boxed::Box;
 use alloc::rc::Rc;
 use alloc::vec::Vec;
+use gi_derive::{with_parent, Widget};
 
 use crate::canvas::Canvas;
 use crate::components::touchable::Touchable;
@@ -15,13 +16,14 @@ use crate::{alignment, Drawable};
 
 use super::Direction;
 
+use core::any::Any;
+
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;
 
-// TODO: Add alignment
-#[derive(Default)]
-pub struct LinearLayout<'a> {
-    pub(crate) parent: Option<&'a dyn Drawable>,
+#[with_parent]
+#[derive(Default, Widget)]
+pub struct LinearLayout {
     pub(crate) contained_widgets: Drawables,
     pub direction: Direction,
     pub horizontal_alignment: alignment::HorizontalAlignment,
@@ -81,16 +83,6 @@ impl Draw for LinearLayout<'_> {
                 }
             }
         }
-    }
-}
-
-impl Drawable for LinearLayout<'static> {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
     }
 }
 

@@ -5,7 +5,7 @@ pub enum SizePolicy {
 }
 
 pub trait Size {
-    fn set_size(&mut self, x: usize, y: usize);
+    fn set_size(&mut self, width: usize, height: usize);
     fn size(&self) -> (usize, usize);
 }
 

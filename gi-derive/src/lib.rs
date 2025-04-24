@@ -10,7 +10,7 @@ pub fn with_parent(_attr: TokenStream, item: TokenStream) -> TokenStream {
         // Add the parent field
         let field: syn::Field = parse_quote! {
             #[doc(hidden)]
-            pub(crate) parent: Option<&'a dyn Drawable>
+            pub(crate) parent: Option<&'a dyn crate::Drawable>
         };
 
         if let syn::Fields::Named(ref mut fields) = data.fields {

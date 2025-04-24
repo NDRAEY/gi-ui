@@ -1,21 +1,19 @@
 use gi_ui::{
     canvas::Canvas,
-    components::{layout::overlay::OverlayLayout, rectangle::Rectangle, text::Text},
+    components::{layout::overlay::OverlayLayout, rectangle::Rectangle, text8x8::Text},
     draw::Draw,
     size::Size,
 };
 
-const WIDTH: usize = 4000;
+const WIDTH: usize = 2000;
 const HEIGHT: usize = 200;
 
 fn main() {
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
 
     let text = Text::new()
-        .with_size(64)
-        .with_font_file("./examples/Ubuntu-Regular.ttf")
-        .unwrap()
-        // .with_text("Aa");
+        .with_size(14)
+        .fix_kerning(-2)
         .with_text("It's Gi UI!!");
 
     let tsize = text.size();

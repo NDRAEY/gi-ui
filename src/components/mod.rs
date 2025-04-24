@@ -4,7 +4,7 @@ pub mod layout;
 pub mod margin;
 pub mod rectangle;
 pub mod scrollview;
-#[cfg(feature = "text")]
-pub mod text;
+#[cfg(feature = "ttf_text")]
+pub mod ttf_text;
 pub mod touchable;
 pub mod widget;

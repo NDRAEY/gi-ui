@@ -38,10 +38,26 @@ impl Text<'_> {
         text
     }
 
-    pub fn fix_kerning(self, kerning: isize) -> Self {
+    pub fn with_kerning(self, kerning: isize) -> Self {
         let mut text = self;
         text.kerning_fix = kerning;
         text
+    }
+
+    pub fn set_size(&mut self, size: usize) {
+        self.size = size;
+    }
+
+    pub fn set_color(&mut self, color: u32) {
+        self.color = color;
+    }
+
+    pub fn set_text<S: ToString>(&mut self, string: S) {
+        self.text = string.to_string();
+    }
+
+    pub fn set_kerning(&mut self, kerning: isize) {
+        self.kerning_fix = kerning;
     }
 }
 

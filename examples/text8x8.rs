@@ -13,7 +13,7 @@ fn main() {
 
     let text = Text::new()
         .with_size(14)
-        .fix_kerning(-2)
+        .with_kerning(-2)
         .with_text("It's Gi UI!!");
 
     let tsize = text.size();

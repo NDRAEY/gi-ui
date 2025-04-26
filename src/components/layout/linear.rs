@@ -169,6 +169,12 @@ pub struct LinearLayout {
     pub(crate) companion: Rc<RefCell<LinearLayoutCompanion>>,
 }
 
+impl Default for LinearLayout {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl LinearLayout {
     pub fn new() -> Self {
         Self {

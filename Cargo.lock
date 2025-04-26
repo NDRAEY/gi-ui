@@ -148,7 +148,6 @@ dependencies = [
  "font8x8",
  "fontdue",
  "gi-derive",
- "nostd",
  "png",
  "tinytga",
 ]
@@ -200,15 +199,6 @@ checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
 dependencies = [
  "memchr",
  "minimal-lexical",
-]
-
-[[package]]
-name = "nostd"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa3dd4c68516f7c5a1838eda0de376d4bc3c2aba3893da0ca2cf400bbc18435f"
-dependencies = [
- "memchr",
 ]
 
 [[package]]

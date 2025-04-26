@@ -1,6 +1,3 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-
 use gi_ui::canvas::Canvas;
 use gi_ui::components::layout::linear::LinearLayout;
 use gi_ui::components::layout::Direction;

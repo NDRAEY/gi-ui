@@ -1,11 +1,10 @@
 use core::cell::{RefCell, RefMut};
 
 use gi_derive::widget;
-#[cfg(feature = "no_std")]
-use nostd::rc::Rc;
+use alloc::rc::Rc;
 
-#[cfg(not(feature = "no_std"))]
-use std::{io::Read, rc::Rc};
+#[cfg(feature = "std")]
+use std::io::Read;
 
 use alloc::string::String;
 use alloc::string::ToString;
@@ -127,7 +126,7 @@ impl Text {
         Some(text_obj)
     }
 
-    #[cfg(not(feature = "no_std"))]
+    #[cfg(feature = "std")]
     pub fn with_font_file(self, font_path: &str) -> Option<Self> {
         let mut file = std::fs::File::open(font_path).unwrap();
         let length = file.metadata().unwrap().len();

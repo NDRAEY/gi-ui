@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, parse_quote, DeriveInput, TraitBound, TypeParamBound};
+use syn::{DeriveInput, TypeParamBound, parse_macro_input, parse_quote};
 
 #[proc_macro_attribute]
 pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -27,13 +27,18 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
             let ident = &type_param.ident;
             let bounds = &type_param.bounds;
 
-            if bounds.iter().any(|a| if let TypeParamBound::Trait(bnd) = a { true } else { false }) {
-
+            if bounds.iter().any(|a| {
+                if let TypeParamBound::Trait(_bnd) = a {
+                    true
+                } else {
+                    false
+                }
+            }) {
                 *param = parse_quote!(#ident: #bounds + 'static);
             }
         }
     }
-    
+
     let mut generics = generics_with_bounds.clone();
 
     for param in &mut generics.params {
@@ -57,14 +62,14 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
             fn parent(&self) -> Option<alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>> {
                 self.parent.as_ref().map(|a| a.clone())
             }
-        
+
         fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
                 self.parent = Some(parent);
             }
         }
     };
 
-    TokenStream::from(quote! { 
+    TokenStream::from(quote! {
         #input
 
         #needed_impl

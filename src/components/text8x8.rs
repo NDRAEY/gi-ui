@@ -89,8 +89,8 @@ impl Draw for Text {
 }
 
 impl Size for Text {
-    fn set_size(&mut self, width: usize, height: usize) {
-        todo!()
+    fn set_size(&mut self, _width: usize, _height: usize) {
+        unreachable!()
     }
 
     fn size(&self) -> (usize, usize) {

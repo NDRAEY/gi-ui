@@ -4,12 +4,11 @@ use crate::size::Size;
 use crate::Drawable;
 
 use alloc::boxed::Box;
-use gi_derive::{with_parent, Widget};
+use gi_derive::widget;
 
 pub type TouchListener = dyn FnMut(&mut dyn Drawable, usize, usize);
 
-#[with_parent]
-#[derive(Widget)]
+#[widget]
 pub struct Touchable {
     pub(crate) element: Box<dyn Drawable>,
     pub(crate) mousedown_listener: Box<TouchListener>,
@@ -17,13 +16,13 @@ pub struct Touchable {
     pub(crate) touch_listener: Box<TouchListener>,
 }
 
-impl Draw for Touchable<'_> {
+impl Draw for Touchable {
     fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         self.element.draw(canvas, x, y);
     }
 }
 
-impl Size for Touchable<'_> {
+impl Size for Touchable {
     fn set_size(&mut self, x: usize, y: usize) {
         self.element.set_size(x, y);
     }
@@ -33,7 +32,7 @@ impl Size for Touchable<'_> {
     }
 }
 
-impl Touchable<'_> {
+impl Touchable {
     pub fn new(element: impl Drawable + 'static) -> Self {
         Self {
             parent: None,

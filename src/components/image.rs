@@ -1,4 +1,4 @@
-use gi_derive::Widget;
+use gi_derive::widget;
 use tinytga::{ParseError, RawTga};
 
 use crate::{canvas::Canvas, draw::Draw, size::Size, Drawable};
@@ -6,9 +6,9 @@ use tinytga::Bpp::Bits24;
 
 use alloc::vec::Vec;
 
-#[derive(Clone, Widget)]
+#[widget]
+#[derive(Clone)]
 pub struct Image {
-    //pub(crate) widget: widget::Widget,
     pub(crate) image_width: usize,
     pub(crate) image_height: usize,
     pub(crate) image_bpp: usize,
@@ -59,6 +59,7 @@ impl Image {
                     .collect();
 
                 Some(Image {
+                    parent: None,
                     image_width: image.size().width as usize,
                     image_height: image.size().height as usize,
                     image_bpp: image.image_data_bpp() as usize,

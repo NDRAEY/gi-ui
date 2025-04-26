@@ -10,8 +10,8 @@ fn main() {
     canvas.fill(0xff_000000);
 
     let mut circle = Circle::new()
-        .set_border(0xff_ffffff, 5)
-        .set_foreground_color(0xff_0000aa);
+        .with_border(0xff_ffffff, 5)
+        .with_foreground_color(0xff_0000aa);
 
     circle.draw(&mut canvas, 0, 0);
 

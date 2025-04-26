@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{DeriveInput, parse_macro_input, parse_quote};
+use syn::{parse_macro_input, parse_quote, DeriveInput, TraitBound, TypeParamBound};
 
 #[proc_macro_attribute]
 pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -10,7 +10,7 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
         // Add the parent field
         let field: syn::Field = parse_quote! {
             #[doc(hidden)]
-            pub(crate) parent: Option<alloc::rc::Rc<std::cell::RefCell<Box<dyn crate::Drawable>>>>
+            pub(crate) parent: Option<alloc::rc::Weak<std::cell::RefCell<dyn crate::Drawable>>>
         };
 
         if let syn::Fields::Named(ref mut fields) = data.fields {
@@ -18,17 +18,34 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
         }
     }
 
-    // Add the lifetime if not present
-    // if input.generics.lifetimes().next().is_none() {
-    //     input.generics.params.insert(0, parse_quote! { 'a });
-    // }
-
     let name = &input.ident;
+    let mut generics_with_bounds = input.generics.clone();
 
-    TokenStream::from(quote! { 
-        #input
+    // Add `'static` to trait generics.
+    for param in &mut generics_with_bounds.params {
+        if let syn::GenericParam::Type(type_param) = param.clone() {
+            let ident = &type_param.ident;
+            let bounds = &type_param.bounds;
 
-        impl Drawable for #name {
+            if bounds.iter().any(|a| if let TypeParamBound::Trait(bnd) = a { true } else { false }) {
+
+                *param = parse_quote!(#ident: #bounds + 'static);
+            }
+        }
+    }
+    
+    let mut generics = generics_with_bounds.clone();
+
+    for param in &mut generics.params {
+        if let syn::GenericParam::Type(type_param) = param.clone() {
+            let ident = &type_param.ident;
+
+            *param = parse_quote!(#ident);
+        }
+    }
+
+    let needed_impl = quote! {
+        impl #generics_with_bounds Drawable for #name #generics {
             fn as_any(&self) -> &dyn core::any::Any {
                 self
             }
@@ -37,13 +54,19 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 self
             }
 
-            fn parent(&self) -> Option<&dyn Drawable> {
-                todo!()
+            fn parent(&self) -> Option<alloc::rc::Weak<std::cell::RefCell<dyn Drawable>>> {
+                self.parent.as_ref().map(|a| a.clone())
             }
         
-            fn set_parent(&mut self, parent: Box<dyn Drawable>) {
-                todo!();
+            fn set_parent(&mut self, parent: std::rc::Weak<std::cell::RefCell<dyn Drawable>>) {
+                self.parent = Some(parent);
             }
         }
+    };
+
+    TokenStream::from(quote! { 
+        #input
+
+        #needed_impl
     })
 }

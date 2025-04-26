@@ -1,3 +1,6 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use gi_ui::canvas::Canvas;
 use gi_ui::components::layout::linear::LinearLayout;
 use gi_ui::components::layout::Direction;
@@ -34,11 +37,13 @@ fn main() {
     layout.push(rect2);
 
     let mut layout2 = LinearLayout::new();
+
     layout2.set_direction(Direction::Horizontal);
     layout2.push(rect3);
     layout2.push(rect4);
 
     let mut layout_common = LinearLayout::new();
+    
     let layout = layout_common.push(layout);
     let layout2 = layout_common.push(layout2);
 

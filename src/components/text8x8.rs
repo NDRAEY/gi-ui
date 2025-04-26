@@ -1,9 +1,9 @@
 use crate::{draw::Draw, size::Size, Drawable};
 use font8x8::UnicodeFonts;
-use gi_derive::{with_parent, Widget};
+use gi_derive::widget;
 
-#[with_parent]
-#[derive(Default, Clone, Widget)]
+#[widget]
+#[derive(Default, Clone)]
 pub struct Text {
     pub(crate) color: u32,
     pub(crate) text: String,
@@ -11,7 +11,7 @@ pub struct Text {
     pub(crate) kerning_fix: isize
 }
 
-impl Text<'_> {
+impl Text {
     pub fn new() -> Self {
         Self {
             color: 0xff_000000,
@@ -61,7 +61,7 @@ impl Text<'_> {
     }
 }
 
-impl Draw for Text<'_> {
+impl Draw for Text {
     fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         let mut rx: isize = 0;
 
@@ -88,7 +88,7 @@ impl Draw for Text<'_> {
     }
 }
 
-impl Size for Text<'_> {
+impl Size for Text {
     fn set_size(&mut self, width: usize, height: usize) {
         todo!()
     }

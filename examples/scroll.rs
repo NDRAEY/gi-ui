@@ -24,11 +24,11 @@ fn main() {
 
     let circle1 = Circle::new()
         .with_radius(SizePolicy::Fixed(20))
-        .set_foreground_color(0xff_a0a00a);
+        .with_foreground_color(0xff_a0a00a);
 
     let circle2 = Circle::new()
         .with_radius(SizePolicy::Fixed(25))
-        .set_foreground_color(0xff_ab23fc);
+        .with_foreground_color(0xff_ab23fc);
 
     let mut layout1 = LinearLayout::new();
     layout1.set_direction(gi_ui::components::layout::Direction::Horizontal);

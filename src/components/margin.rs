@@ -1,3 +1,5 @@
+use gi_derive::widget;
+
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
@@ -10,6 +12,7 @@ pub struct MarginValue {
     pub bottom: usize,
 }
 
+#[widget]
 #[derive(Debug)]
 pub struct Margin<T: Drawable> {
     pub(crate) element: T,
@@ -41,55 +44,49 @@ impl<T: Drawable> Size for Margin<T> {
     }
 }
 
-impl<T: 'static + Drawable> Drawable for Margin<T> {
-    fn as_any(&self) -> &dyn core::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-        self
-    }
-}
-
 impl<T: 'static + Drawable> Margin<T> {
     pub fn with(element: T, margin: MarginValue) -> Self {
-        Self { element, margin }
+        Self {
+            parent: None,
+            element,
+            margin,
+        }
     }
 
     pub fn left_and_right(element: T, left: usize, right: usize) -> Self {
-        Self {
+        Self::with(
             element,
-            margin: MarginValue {
+            MarginValue {
                 left,
                 top: 0,
                 right,
                 bottom: 0,
             },
-        }
+        )
     }
 
     pub fn top_and_bottom(element: T, top: usize, bottom: usize) -> Self {
-        Self {
+        Self::with(
             element,
-            margin: MarginValue {
+            MarginValue {
                 left: 0,
                 top,
                 right: 0,
                 bottom,
             },
-        }
+        )
     }
 
     pub fn like_args(element: T, left: usize, top: usize, right: usize, bottom: usize) -> Self {
-        Self {
+        Self::with(
             element,
-            margin: MarginValue {
+            MarginValue {
                 left,
                 top,
                 right,
                 bottom,
             },
-        }
+        )
     }
 
     pub fn element_position(&self) -> (usize, usize) {

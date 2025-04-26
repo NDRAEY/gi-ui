@@ -1,7 +1,6 @@
 use core::cell::{RefCell, RefMut};
 
-use gi_derive::with_parent;
-use gi_derive::Widget;
+use gi_derive::widget;
 #[cfg(feature = "no_std")]
 use nostd::rc::Rc;
 
@@ -17,12 +16,11 @@ use fontdue::{
     FontSettings,
 };
 
-use crate::parent::HasParent;
 use crate::{draw::Draw, size::Size, Drawable};
 
-#[with_parent]
-#[derive(Default, Clone, Widget)]
-pub struct Text<'a> {
+#[widget]
+#[derive(Default, Clone)]
+pub struct Text {
     pub(crate) color: u32,
     pub(crate) text: String,
     pub(crate) size: usize,
@@ -32,7 +30,7 @@ pub struct Text<'a> {
     layout: Rc<RefCell<Option<fontdue::layout::Layout>>>,
 }
 
-impl Draw for Text<'_> {
+impl Draw for Text {
     fn draw(&mut self, canvas: &mut crate::canvas::Canvas, x: isize, y: isize) {
         let mut layout_ref = self.prepare_layout();
         let layout = layout_ref.as_mut().unwrap();
@@ -70,7 +68,7 @@ impl Draw for Text<'_> {
     }
 }
 
-impl Size for Text<'_> {
+impl Size for Text {
     fn set_size(&mut self, _: usize, _: usize) {
         unreachable!();
     }
@@ -86,7 +84,7 @@ impl Size for Text<'_> {
     }
 }
 
-impl Text<'_> {
+impl Text {
     pub fn new() -> Self {
         let mut layout = Layout::new(CoordinateSystem::PositiveYDown);
         layout.reset(&LayoutSettings {
@@ -150,17 +148,5 @@ impl Text<'_> {
         layout.append(fonts, &TextStyle::new(&self.text, self.size as f32, 0));
 
         almost_layout
-    }
-}
-
-impl<'a> HasParent<'a> for Text<'a> {
-    fn parent(&self) -> Option<&dyn Drawable> {
-        None
-    }
-
-    fn set_parent(&mut self, parent: &'a dyn Drawable) {
-        self.parent = Some(parent);
-
-        core::todo!();
     }
 }

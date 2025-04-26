@@ -26,7 +26,7 @@ fn main() {
     let close_button = Touchable::new(Margin::like_args(
         Circle::new()
             .with_radius(SizePolicy::Fixed(10))
-            .set_foreground_color(0xff_ff0000),
+            .with_foreground_color(0xff_ff0000),
         0,
         0,
         10,
@@ -37,13 +37,13 @@ fn main() {
 
         let elem: &mut Margin<Circle> = i_am_sure_mut(e);
 
-        *elem.element_mut() = elem.element_mut().set_foreground_color(0xff_ffffff);
+        elem.element_mut().set_foreground_color(0xff_ffffff);
     });
 
     let minimize_button = Margin::like_args(
         Circle::new()
             .with_radius(SizePolicy::Fixed(10))
-            .set_foreground_color(0xff_ffff00),
+            .with_foreground_color(0xff_ffff00),
         0,
         0,
         10,
@@ -52,7 +52,7 @@ fn main() {
     let maximize_button = Margin::like_args(
         Circle::new()
             .with_radius(SizePolicy::Fixed(10))
-            .set_foreground_color(0xff_00ff00),
+            .with_foreground_color(0xff_00ff00),
         0,
         0,
         10,

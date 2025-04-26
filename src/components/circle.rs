@@ -70,7 +70,12 @@ impl Circle {
             SizePolicy::FillParent => self
                 .parent
                 .as_ref()
-                .map(|a| (a.as_ref().borrow().size().0 / 2) - self.border_size)
+                .map(|a| {
+                    let v = a.upgrade().unwrap();
+                    let y = v.as_ref().borrow();
+
+                    (y.size().0 / 2) - self.border_size
+                })
                 .unwrap_or(
                     canvas
                         .map(|a| (core::cmp::min(a.width(), a.height()) / 2) - self.border_size)
@@ -79,20 +84,36 @@ impl Circle {
         }
     }
 
-    pub fn with_radius(mut self, radius: SizePolicy) -> Self {
+    pub fn with_radius(self, radius: SizePolicy) -> Self {
+        let mut circle = self;
+        circle.radius = radius;
+        circle
+    }
+
+    pub fn with_foreground_color(self, color: u32) -> Self {
+        let mut circle = self;
+        circle.foreground_color = color;
+        circle
+    }
+
+    pub fn with_border(self, color: u32, size: usize) -> Self {
+        let mut circle = self;
+        circle.border_color = color;
+        circle.border_size = size;
+        circle
+    }
+
+    pub fn set_radius(&mut self, radius: SizePolicy) {
         self.radius = radius;
-        self
     }
 
-    pub fn set_foreground_color(mut self, color: u32) -> Self {
+    pub fn set_foreground_color(&mut self, color: u32) {
         self.foreground_color = color;
-        self
     }
 
-    pub fn set_border(mut self, color: u32, size: usize) -> Self {
+    pub fn set_border(&mut self, color: u32, size: usize) {
         self.border_color = color;
         self.border_size = size;
-        self
     }
 
     pub fn foreground_color(&self) -> u32 {

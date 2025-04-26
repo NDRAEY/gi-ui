@@ -10,7 +10,7 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
         // Add the parent field
         let field: syn::Field = parse_quote! {
             #[doc(hidden)]
-            pub(crate) parent: Option<alloc::rc::Weak<std::cell::RefCell<dyn crate::Drawable>>>
+            pub(crate) parent: Option<alloc::rc::Weak<core::cell::RefCell<dyn crate::Drawable>>>
         };
 
         if let syn::Fields::Named(ref mut fields) = data.fields {
@@ -54,11 +54,11 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 self
             }
 
-            fn parent(&self) -> Option<alloc::rc::Weak<std::cell::RefCell<dyn Drawable>>> {
+            fn parent(&self) -> Option<alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>> {
                 self.parent.as_ref().map(|a| a.clone())
             }
         
-            fn set_parent(&mut self, parent: std::rc::Weak<std::cell::RefCell<dyn Drawable>>) {
+        fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
                 self.parent = Some(parent);
             }
         }

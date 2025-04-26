@@ -1,4 +1,4 @@
-#![cfg_attr(all(not(test), feature = "no_std"), no_std)]
+#![cfg_attr(all(not(test), not(feature = "std")), no_std)]
 
 use core::any::Any;
 
@@ -26,11 +26,11 @@ pub trait Drawable: draw::Draw + size::Size {
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
 
-    fn parent(&self) -> Option<alloc::rc::Weak<std::cell::RefCell<dyn Drawable>>> {
+    fn parent(&self) -> Option<alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>> {
         None
     }
 
-    fn set_parent(&mut self, _parent: std::rc::Weak<std::cell::RefCell<dyn Drawable>>) {
+    fn set_parent(&mut self, _parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
         todo!();
     }
 }

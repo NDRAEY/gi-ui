@@ -4,12 +4,11 @@ use core::cmp::max;
 use alloc::boxed::Box;
 use alloc::rc::Rc;
 use alloc::vec::Vec;
-use gi_derive::{with_parent, Widget};
+use gi_derive::widget;
 
 use crate::canvas::Canvas;
-use crate::components::touchable::Touchable;
+// use crate::components::touchable::Touchable;
 use crate::draw::Draw;
-use crate::parent::HasParent;
 use crate::side::Side;
 use crate::size::Size;
 use crate::{alignment, Drawable};
@@ -20,8 +19,8 @@ use super::Direction;
 type ContainerDrawable = Rc<RefCell<Box<(dyn Drawable + 'static)>>>;
 type Drawables = Vec<ContainerDrawable>;
 
-#[with_parent]
-#[derive(Default, Widget)]
+#[widget]
+#[derive(Default)]
 pub struct LinearLayout {
     pub(crate) contained_widgets: Drawables,
     pub direction: Direction,
@@ -30,7 +29,7 @@ pub struct LinearLayout {
     pub margin: crate::side::Side,
 }
 
-impl Size for LinearLayout<'_> {
+impl Size for LinearLayout {
     fn set_size(&mut self, _x: usize, _y: usize) {
         unreachable!();
     }
@@ -62,7 +61,7 @@ impl Size for LinearLayout<'_> {
     }
 }
 
-impl Draw for LinearLayout<'_> {
+impl Draw for LinearLayout {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         let mut sx = x + self.margin.left;
         let mut sy = y + self.margin.top;
@@ -85,7 +84,7 @@ impl Draw for LinearLayout<'_> {
     }
 }
 
-impl LinearLayout<'_> {
+impl LinearLayout {
     pub fn new() -> Self {
         Self {
             ..Default::default()
@@ -140,27 +139,21 @@ impl LinearLayout<'_> {
         None
     }
 
-    pub fn process_touches(&mut self, x: usize, y: usize) {
-        for i in &self.contained_widgets {
-            let position = self.calculate_element_position(i).unwrap();
-            let size = i.borrow().size();
+    // pub fn process_touches(&mut self, x: usize, y: usize) {
+    //     for i in &self.contained_widgets {
+    //         let position = self.calculate_element_position(i).unwrap();
+    //         let size = i.borrow().size();
 
-            if !crate::rect::is_point((x, y), (position.0, position.1, size.0, size.1)) {
-                continue;
-            }
+    //         if !crate::rect::is_point((x, y), (position.0, position.1, size.0, size.1)) {
+    //             continue;
+    //         }
 
-            let mut elem = i.borrow_mut();
-            let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
+    //         let mut elem = i.borrow_mut();
+    //         let elem: Option<&mut Touchable> = elem.as_any_mut().downcast_mut::<Touchable>();
 
-            if let Some(elem) = elem {
-                elem.touch(x - position.0, y - position.1);
-            }
-        }
-    }
-}
-
-impl HasParent<'_> for LinearLayout<'_> {
-    fn parent(&self) -> Option<&dyn Drawable> {
-        self.parent
-    }
+    //         if let Some(elem) = elem {
+    //             elem.touch(x - position.0, y - position.1);
+    //         }
+    //     }
+    // }
 }

@@ -3,14 +3,14 @@ use quote::quote;
 use syn::{DeriveInput, parse_macro_input, parse_quote};
 
 #[proc_macro_attribute]
-pub fn with_parent(_attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input = parse_macro_input!(item as DeriveInput);
 
     if let syn::Data::Struct(ref mut data) = input.data {
         // Add the parent field
         let field: syn::Field = parse_quote! {
             #[doc(hidden)]
-            pub(crate) parent: Option<&'a dyn crate::Drawable>
+            pub(crate) parent: Option<alloc::rc::Rc<std::cell::RefCell<Box<dyn crate::Drawable>>>>
         };
 
         if let syn::Fields::Named(ref mut fields) = data.fields {
@@ -19,52 +19,31 @@ pub fn with_parent(_attr: TokenStream, item: TokenStream) -> TokenStream {
     }
 
     // Add the lifetime if not present
-    if input.generics.lifetimes().next().is_none() {
-        input.generics.params.insert(0, parse_quote! { 'a });
-    }
+    // if input.generics.lifetimes().next().is_none() {
+    //     input.generics.params.insert(0, parse_quote! { 'a });
+    // }
 
-    TokenStream::from(quote! { #input })
-}
-
-#[proc_macro_derive(Widget)]
-pub fn as_widget(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as DeriveInput);
     let name = &input.ident;
 
-    // Check if the struct already has lifetime parameters
-    let has_lifetimes = match &input.generics {
-        syn::Generics { params, .. } => params
-            .iter()
-            .any(|param| matches!(param, syn::GenericParam::Lifetime(_))),
-    };
+    TokenStream::from(quote! { 
+        #input
 
-    let expanded = if !has_lifetimes {
-        // If the struct already has lifetimes, use it as-is
-        quote! {
-            impl Drawable for #name {
-                fn as_any(&self) -> &dyn core::any::Any {
-                    self
-                }
+        impl Drawable for #name {
+            fn as_any(&self) -> &dyn core::any::Any {
+                self
+            }
 
-                fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-                    self
-                }
+            fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+                self
+            }
+
+            fn parent(&self) -> Option<&dyn Drawable> {
+                todo!()
+            }
+        
+            fn set_parent(&mut self, parent: Box<dyn Drawable>) {
+                todo!();
             }
         }
-    } else {
-        // If the struct has no lifetimes, add 'static
-        quote! {
-            impl Drawable for #name<'static> {
-                fn as_any(&self) -> &dyn core::any::Any {
-                    self
-                }
-
-                fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
-                    self
-                }
-            }
-        }
-    };
-
-    TokenStream::from(expanded)
+    })
 }

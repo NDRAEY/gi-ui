@@ -1,11 +1,11 @@
-use gi_derive::Widget;
+use gi_derive::widget;
 
-//use crate::components::widget;
 use crate::draw::Draw;
 use crate::size::Size;
 use crate::Drawable;
 
-#[derive(Default, Clone, Widget)]
+#[widget]
+#[derive(Default, Clone)]
 pub struct Rectangle {
     pub(crate) width: usize,
     pub(crate) height: usize,

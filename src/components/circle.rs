@@ -1,15 +1,14 @@
-use gi_derive::{with_parent, Widget};
+use gi_derive::widget;
 
 use crate::{
     canvas::Canvas,
     draw::Draw,
-    parent::HasParent,
     size::{Size, SizePolicy},
     Drawable,
 };
 
-#[with_parent]
-#[derive(Clone, Copy, Widget)]
+#[widget]
+#[derive(Clone)]
 pub struct Circle {
     pub(crate) radius: SizePolicy,
     pub(crate) foreground_color: u32,
@@ -17,13 +16,7 @@ pub struct Circle {
     pub(crate) border_size: usize,
 }
 
-impl HasParent<'_> for Circle<'_> {
-    fn parent(&self) -> Option<&dyn Drawable> {
-        self.parent
-    }
-}
-
-impl Draw for Circle<'_> {
+impl Draw for Circle {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         let radius = self.calculate_radius(Some(canvas));
 
@@ -39,7 +32,7 @@ impl Draw for Circle<'_> {
     }
 }
 
-impl Size for Circle<'_> {
+impl Size for Circle {
     fn set_size(&mut self, _x: usize, _y: usize) {
         unreachable!();
     }
@@ -54,13 +47,13 @@ impl Size for Circle<'_> {
     }
 }
 
-impl Default for Circle<'_> {
+impl Default for Circle {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl Circle<'_> {
+impl Circle {
     pub fn new() -> Self {
         Self {
             parent: None,
@@ -76,7 +69,8 @@ impl Circle<'_> {
             SizePolicy::Fixed(sz) => sz,
             SizePolicy::FillParent => self
                 .parent
-                .map(|a| (a.size().0 / 2) - self.border_size)
+                .as_ref()
+                .map(|a| (a.as_ref().borrow().size().0 / 2) - self.border_size)
                 .unwrap_or(
                     canvas
                         .map(|a| (core::cmp::min(a.width(), a.height()) / 2) - self.border_size)

@@ -7,7 +7,6 @@ use gi_derive::widget;
 
 use crate::canvas::Canvas;
 use crate::components::touchable::Touchable;
-// use crate::components::touchable::Touchable;
 use crate::draw::Draw;
 use crate::side::Side;
 use crate::size::Size;
@@ -128,7 +127,7 @@ impl LinearLayoutCompanion {
         for i in &self.contained_widgets {
             let (w, h) = i.borrow().size();
 
-            if i.as_ptr() == element.as_ptr() {
+            if core::ptr::addr_eq(i.as_ptr(), element.as_ptr()) {
                 return Some((sx, sy));
             }
 
@@ -164,7 +163,6 @@ impl LinearLayoutCompanion {
     }
 }
 
-#[widget]
 pub struct LinearLayout {
     pub(crate) companion: Rc<RefCell<LinearLayoutCompanion>>,
 }
@@ -178,7 +176,6 @@ impl Default for LinearLayout {
 impl LinearLayout {
     pub fn new() -> Self {
         Self {
-            parent: None,
             companion: Rc::new(RefCell::new(LinearLayoutCompanion::new())),
         }
     }
@@ -229,5 +226,23 @@ impl Size for LinearLayout {
 impl Draw for LinearLayout {
     fn draw(&mut self, canvas: &mut Canvas, x: isize, y: isize) {
         self.companion.borrow_mut().draw(canvas, x, y);
+    }
+}
+
+impl Drawable for LinearLayout {
+    fn as_any(&self) -> &dyn core::any::Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn core::any::Any {
+        self
+    }
+    
+    fn parent(&self) -> Option<alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>> {
+        self.companion.borrow().parent()
+    }
+    
+    fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
+        self.companion.borrow_mut().set_parent(parent)
     }
 }

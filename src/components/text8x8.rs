@@ -1,5 +1,7 @@
 use crate::{draw::Draw, size::Size, Drawable};
 use font8x8::UnicodeFonts;
+use alloc::string::String;
+use alloc::string::ToString;
 use gi_derive::widget;
 
 #[widget]

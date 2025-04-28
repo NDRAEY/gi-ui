@@ -17,6 +17,7 @@ pub struct Canvas {
     height: usize,
 }
 
+#[derive(Debug)]
 pub enum CanvasError {
     InvalidBuffer,
 }
@@ -33,7 +34,7 @@ impl Canvas {
         }
     }
 
-    pub fn from_pixel_slice(data: &[u8], width: usize, height: usize) -> Result<Self, CanvasError> {
+    pub fn from_rgba_pixel_slice(data: &[u8], width: usize, height: usize) -> Result<Self, CanvasError> {
         let buffer_size = width * height * (BITS_PER_PIXEL >> 3);
 
         if data.len() != buffer_size {
@@ -47,6 +48,25 @@ impl Canvas {
             height,
         })
     }
+
+    pub fn from_rgb_pixel_slice(data: &[u8], width: usize, height: usize) -> Result<Self, CanvasError> {
+        let buffer_size = width * height * (BITS_PER_PIXEL >> 3);
+
+        let mut framebuffer: Vec<u8> = Vec::with_capacity(buffer_size);
+
+        for i in data.chunks(3) {
+            framebuffer.extend_from_slice(i);
+            framebuffer.push(0);
+        }
+
+        Ok(Self {
+            parent: None,
+            framebuffer: framebuffer,
+            width,
+            height,
+        })
+    }
+
 
     pub fn buffer(&self) -> &[u8] {
         self.framebuffer.as_ref()

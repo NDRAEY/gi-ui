@@ -17,6 +17,10 @@ pub struct Canvas {
     height: usize,
 }
 
+pub enum CanvasError {
+    InvalidBuffer,
+}
+
 impl Canvas {
     pub fn new(width: usize, height: usize) -> Self {
         let buffer_size = width * height * (BITS_PER_PIXEL >> 3);
@@ -27,6 +31,21 @@ impl Canvas {
             width,
             height,
         }
+    }
+
+    pub fn from_pixel_slice(data: &[u8], width: usize, height: usize) -> Result<Self, CanvasError> {
+        let buffer_size = width * height * (BITS_PER_PIXEL >> 3);
+
+        if data.len() != buffer_size {
+            return Err(CanvasError::InvalidBuffer);
+        }
+
+        Ok(Self {
+            parent: None,
+            framebuffer: Vec::from(data),
+            width,
+            height,
+        })
     }
 
     pub fn buffer(&self) -> &[u8] {

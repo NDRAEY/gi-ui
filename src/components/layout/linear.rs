@@ -190,6 +190,17 @@ impl LinearLayout {
         self.push_bare(Rc::new(RefCell::new(element)))
     }
 
+    // pub fn with(elements: &[(impl Drawable + 'static)]) -> Vec<Rc<RefCell<dyn Drawable>>> {
+    //     let mut layout = Self::new();
+    //     let mut rcs = Vec::new();
+
+    //     for i in elements {
+    //         rcs.push(layout.push(i));
+    //     }
+
+    //     rcs
+    // }
+
     #[inline]
     pub fn push_bare(&mut self, element: Rc<RefCell<dyn Drawable>>) -> Rc<RefCell<dyn Drawable>> {
         let binding = &self.companion;

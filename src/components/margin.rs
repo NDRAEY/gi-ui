@@ -45,6 +45,14 @@ impl<T: Drawable> Size for Margin<T> {
 }
 
 impl<T: 'static + Drawable> Margin<T> {
+    pub fn new(element: T) -> Self {
+        Self {
+            parent: None,
+            element,
+            margin: MarginValue::default(),
+        }
+    }
+
     pub fn with(element: T, margin: MarginValue) -> Self {
         Self {
             parent: None,
@@ -53,40 +61,39 @@ impl<T: 'static + Drawable> Margin<T> {
         }
     }
 
-    pub fn left_and_right(element: T, left: usize, right: usize) -> Self {
-        Self::with(
-            element,
-            MarginValue {
-                left,
-                top: 0,
-                right,
-                bottom: 0,
-            },
-        )
+    pub fn left(self, left: usize) -> Self {
+        let mut margin = self;
+        margin.margin.left = left;
+        margin
     }
 
-    pub fn top_and_bottom(element: T, top: usize, bottom: usize) -> Self {
-        Self::with(
-            element,
-            MarginValue {
-                left: 0,
-                top,
-                right: 0,
-                bottom,
-            },
-        )
+    pub fn right(self, right: usize) -> Self {
+        let mut margin = self;
+        margin.margin.right = right;
+        margin
     }
 
-    pub fn like_args(element: T, left: usize, top: usize, right: usize, bottom: usize) -> Self {
-        Self::with(
-            element,
-            MarginValue {
-                left,
-                top,
-                right,
-                bottom,
-            },
-        )
+    pub fn bottom(self, bottom: usize) -> Self {
+        let mut margin = self;
+        margin.margin.bottom = bottom;
+        margin
+    }
+
+    pub fn top(self, top: usize) -> Self {
+        let mut margin = self;
+        margin.margin.top = top;
+        margin
+    }
+
+    pub fn all(self, value: usize) -> Self {
+        let mut margin = self;
+        margin.margin = MarginValue {
+            left: value,
+            top: value,
+            right: value,
+            bottom: value,
+        };
+        margin
     }
 
     pub fn element_position(&self) -> (usize, usize) {

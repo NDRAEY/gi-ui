@@ -5,6 +5,7 @@ use gi_ui::components::layout::overlay::OverlayLayout;
 use gi_ui::components::layout::Direction;
 use gi_ui::components::margin::Margin;
 use gi_ui::components::rectangle::Rectangle;
+use gi_ui::components::text8x8::Text;
 use gi_ui::components::touchable::Touchable;
 use gi_ui::draw::Draw;
 use gi_ui::helpers::i_am_sure_mut;
@@ -23,15 +24,14 @@ fn main() {
         .with_size(800, HEIGHT)
         .foreground_color(0xff_0000ff);
 
-    let close_button = Touchable::new(Margin::like_args(
-        Circle::new()
-            .with_radius(SizePolicy::Fixed(10))
-            .with_foreground_color(0xff_ff0000),
-        0,
-        0,
-        10,
-        0,
-    ))
+    let close_button = Touchable::new(
+        Margin::new(
+            Circle::new()
+                .with_radius(SizePolicy::Fixed(10))
+                .with_foreground_color(0xff_ff0000),
+        )
+        .right(10),
+    )
     .with_touch_listener(|e, _, _| {
         println!("Clicked on close");
 
@@ -40,24 +40,21 @@ fn main() {
         elem.element_mut().set_foreground_color(0xff_ffffff);
     });
 
-    let minimize_button = Margin::like_args(
+    let minimize_button = Margin::new(
         Circle::new()
             .with_radius(SizePolicy::Fixed(10))
             .with_foreground_color(0xff_ffff00),
-        0,
-        0,
-        10,
-        0,
-    );
-    let maximize_button = Margin::like_args(
+    )
+    .right(10);
+
+    let maximize_button = Margin::new(
         Circle::new()
             .with_radius(SizePolicy::Fixed(10))
             .with_foreground_color(0xff_00ff00),
-        0,
-        0,
-        10,
-        0,
-    );
+    )
+    .right(10);
+
+    let titlebar = Margin::new(Text::new().with_text("Hello world!").with_color(0xff_ffffff).with_size(16)).right(10);
 
     let mut together = LinearLayout::new();
     together.set_direction(Direction::Horizontal);
@@ -66,26 +63,31 @@ fn main() {
     together.push(minimize_button);
     together.push(maximize_button);
 
-    let together = Margin::like_args(together, 15, 15, 15, 15);
     let together = Touchable::new(together).with_touch_listener(|elem: &mut dyn Drawable, x, y| {
-        let el = elem
-            .as_any_mut()
-            .downcast_mut::<Margin<LinearLayout>>()
-            .unwrap();
+        let el: &mut LinearLayout = i_am_sure_mut(elem);
+        el.process_touches(x, y);
+    });
+
+    let mut fin = LinearLayout::new();
+    fin.set_direction(Direction::Horizontal);
+    
+    fin.push(together);
+    fin.push(titlebar);
+
+    let fin = Margin::new(fin).all(15);
+    let fin = Touchable::new(fin).with_touch_listener(|elem: &mut dyn Drawable, x, y| {
+        let el: &mut Margin<LinearLayout> = i_am_sure_mut(elem);
         el.element_mut().process_touches(x, y);
     });
 
     bar.push(rect);
-    let clickable_layout = bar.push(together);
+    let clickable_layout = bar.push(fin);
 
     let (total_width, total_height) = bar.size();
 
     {
         let mut clickable_layout = clickable_layout.borrow_mut();
-        let clickable_layout: &mut Touchable = clickable_layout
-            .as_any_mut()
-            .downcast_mut::<Touchable>()
-            .unwrap();
+        let clickable_layout: &mut Touchable = i_am_sure_mut(clickable_layout.as_mut());
 
         clickable_layout.touch(20, 20);
     }

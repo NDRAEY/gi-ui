@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["std", "ttf_text", "png"]
+default = ["std", "ttf_text", "png", "text8x8"]
 std = []
 ttf_text = ["dep:fontdue"]
 text8x8 = ["dep:font8x8"]

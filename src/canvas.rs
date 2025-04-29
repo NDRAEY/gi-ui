@@ -182,7 +182,10 @@ impl Canvas {
 
         for y in 0..height {
             for x in 0..width {
-                canvas.set_pixel(x as _, y as _, self.get_pixel(x, y).unwrap_or(0));
+                canvas.set_pixel(x as _, y as _, match self.get_pixel(x, y) {
+                    Some(a) => a,
+                    None => continue
+                });
             }
         }
 

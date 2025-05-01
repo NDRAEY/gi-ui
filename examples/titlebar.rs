@@ -10,7 +10,7 @@ use gi_ui::components::touchable::Touchable;
 use gi_ui::draw::Draw;
 use gi_ui::helpers::i_am_sure_mut;
 use gi_ui::size::{Size, SizePolicy};
-use gi_ui::Drawable;
+use gi_ui::{linear_layout, Drawable};
 
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 200;
@@ -56,23 +56,16 @@ fn main() {
 
     let titlebar = Margin::new(Text::new().with_text("Hello world!").with_color(0xff_ffffff).with_size(16)).right(10);
 
-    let mut together = LinearLayout::new();
+    let mut together = linear_layout![close_button, minimize_button, maximize_button];
     together.set_direction(Direction::Horizontal);
-
-    together.push(close_button);
-    together.push(minimize_button);
-    together.push(maximize_button);
 
     let together = Touchable::new(together).with_touch_listener(|elem: &mut dyn Drawable, x, y| {
         let el: &mut LinearLayout = i_am_sure_mut(elem);
         el.process_touches(x, y);
     });
 
-    let mut fin = LinearLayout::new();
+    let mut fin = linear_layout![together, titlebar];
     fin.set_direction(Direction::Horizontal);
-    
-    fin.push(together);
-    fin.push(titlebar);
 
     let fin = Margin::new(fin).all(15);
     let fin = Touchable::new(fin).with_touch_listener(|elem: &mut dyn Drawable, x, y| {

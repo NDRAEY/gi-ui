@@ -190,17 +190,6 @@ impl LinearLayout {
         self.push_bare(Rc::new(RefCell::new(element)))
     }
 
-    // pub fn with(elements: &[(impl Drawable + 'static)]) -> Vec<Rc<RefCell<dyn Drawable>>> {
-    //     let mut layout = Self::new();
-    //     let mut rcs = Vec::new();
-
-    //     for i in elements {
-    //         rcs.push(layout.push(i));
-    //     }
-
-    //     rcs
-    // }
-
     #[inline]
     pub fn push_bare(&mut self, element: Rc<RefCell<dyn Drawable>>) -> Rc<RefCell<dyn Drawable>> {
         let binding = &self.companion;
@@ -256,4 +245,17 @@ impl Drawable for LinearLayout {
     fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
         self.companion.borrow_mut().set_parent(parent)
     }
+}
+
+#[macro_export]
+macro_rules! linear_layout {
+    ($($x:expr),+) => {
+        {
+            let mut layout = $crate::components::layout::linear::LinearLayout::new();
+
+            $(layout.push($x));+;
+
+            layout
+        }
+    };
 }

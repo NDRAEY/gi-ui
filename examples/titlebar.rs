@@ -21,7 +21,7 @@ fn main() {
     let mut bar = OverlayLayout::new();
 
     let rect = Rectangle::new()
-        .with_size(800, HEIGHT)
+        .with_size(600, HEIGHT)
         .foreground_color(0xff_0000ff);
 
     let close_button = Touchable::new(
@@ -54,7 +54,13 @@ fn main() {
     )
     .right(10);
 
-    let titlebar = Margin::new(Text::new().with_text("Hello world!").with_color(0xff_ffffff).with_size(16)).right(10);
+    let titlebar = Margin::new(
+        Text::new()
+            .with_text("Hello world!")
+            .with_color(0xff_ffffff)
+            .with_size(16),
+    )
+    .right(10);
 
     let mut together = linear_layout![close_button, minimize_button, maximize_button];
     together.set_direction(Direction::Horizontal);
@@ -74,6 +80,7 @@ fn main() {
     });
 
     bar.push(rect);
+    
     let clickable_layout = bar.push(fin);
 
     let (total_width, total_height) = bar.size();

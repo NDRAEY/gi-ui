@@ -63,7 +63,7 @@ pub fn widget(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 self.parent.as_ref().map(|a| a.clone())
             }
 
-        fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
+            fn set_parent(&mut self, parent: alloc::rc::Weak<core::cell::RefCell<dyn Drawable>>) {
                 self.parent = Some(parent);
             }
         }
